@@ -176,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return body;
   }
 
-  void _readAll() async {
+  void _readAllProperty() async {
     final storage = new FlutterSecureStorage();
     var value = await storage.readAll();
     setState(() {
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _readAll();
+    _readAllProperty();
   }
 
   @override
@@ -279,38 +279,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final _formKey = new GlobalKey<FormState>();
 
-  void _read(ScrapmediaProperty key) async {
-    final storage = new FlutterSecureStorage();
-    String value = await storage.read(key: key.toString());
-    setState(() {
-      switch (key) {
-        case ScrapmediaProperty.accessKey:
-          awsAccessKeyIdController.text = value;
-          break;
-        case ScrapmediaProperty.secretKey:
-          awsSecretAccessKeyController.text = value;
-          break;
-        case ScrapmediaProperty.associateTag:
-          awsAssociateTagController.text = value;
-          break;
-        case ScrapmediaProperty.projectName:
-          scrapboxProjectNameController.text = value;
-          break;
-        case ScrapmediaProperty.useService:
-          break;
-        case ScrapmediaProperty.bitlyApiKey:
-          bitlyApiKeyController.text = value;
-          break;
-      }
-    });
-  }
-
-  void _save(ScrapmediaProperty key, String value) async {
-    final storage = new FlutterSecureStorage();
-    await storage.write(key: key.toString(), value: value);
-    print(key.toString() + value);
-  }
-
   void _saveAll() async {
     final storage = new FlutterSecureStorage();
 
@@ -341,6 +309,7 @@ class _SettingsPageState extends State<SettingsPage> {
     awsSecretAccessKeyController.dispose();
     awsAssociateTagController.dispose();
     scrapboxProjectNameController.dispose();
+    bitlyApiKeyController.dispose();
     super.dispose();
   }
 
