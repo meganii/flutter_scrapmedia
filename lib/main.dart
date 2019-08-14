@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:apaa/apaa.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_opendb/flutter_opendb.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:apaa/apaa.dart';
-import 'package:flutter_opendb/flutter_opendb.dart';
-import './model/ScrapMediaItem.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import './model/BitlyItem.dart';
+import './model/ScrapMediaItem.dart';
 
 enum ScrapmediaServices { openDBAPI, awsAPI }
+
 ScrapmediaServices _service = ScrapmediaServices.openDBAPI;
 
 enum ScrapmediaProperty {
@@ -48,9 +51,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
+
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -116,7 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
         var api = APAA(awsAccessKeyIdController.text,
             awsSecretAccessKeyController.text, awsAssociateTagController.text);
         var result = await api.search(isbn);
-        var shotenUrl = await _shortUrl(bitlyApiKeyController.text, result.productUrl);
+        var shotenUrl =
+            await _shortUrl(bitlyApiKeyController.text, result.productUrl);
         if (result != null) {
           item = ScrapMediaItem(
               title: result.title,
@@ -176,18 +180,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final storage = new FlutterSecureStorage();
     var value = await storage.readAll();
     setState(() {
-      awsAccessKeyIdController.text = value[ScrapmediaProperty.accessKey.toString()];
+      awsAccessKeyIdController.text =
+          value[ScrapmediaProperty.accessKey.toString()];
       awsSecretAccessKeyController.text =
-      value[ScrapmediaProperty.secretKey.toString()];
+          value[ScrapmediaProperty.secretKey.toString()];
       awsAssociateTagController.text =
-      value[ScrapmediaProperty.associateTag.toString()];
+          value[ScrapmediaProperty.associateTag.toString()];
       scrapboxProjectNameController.text =
-      value[ScrapmediaProperty.projectName.toString()];
+          value[ScrapmediaProperty.projectName.toString()];
       if (value[ScrapmediaProperty.useService.toString()] ==
           ScrapmediaServices.awsAPI.toString()) {
         _service = ScrapmediaServices.awsAPI;
       }
-      bitlyApiKeyController.text = value[ScrapmediaProperty.bitlyApiKey.toString()];
+      bitlyApiKeyController.text =
+          value[ScrapmediaProperty.bitlyApiKey.toString()];
     });
   }
 
@@ -227,24 +233,26 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Row(
                 children: <Widget>[
-                  if (isVisible) Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                    child: FlatButton(
-                      child: Text('Tweet'),
-                      textColor: Colors.white,
-                      color: Colors.blue,
-                      onPressed: () => {_tweet(_item)},
+                  if (isVisible)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                      child: FlatButton(
+                        child: Text('Tweet'),
+                        textColor: Colors.white,
+                        color: Colors.blue,
+                        onPressed: () => {_tweet(_item)},
+                      ),
                     ),
-                  ),
-                  if (isVisible) Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                    child: FlatButton(
-                      child: Text('Scrapbox'),
-                      textColor: Colors.white,
-                      color: Colors.green,
-                      onPressed: () => {_openScrapbox(_item)},
+                  if (isVisible)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                      child: FlatButton(
+                        child: Text('Scrapbox'),
+                        textColor: Colors.white,
+                        color: Colors.green,
+                        onPressed: () => {_openScrapbox(_item)},
+                      ),
                     ),
-                  ),
                 ],
               ),
               Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 100.0))
@@ -319,7 +327,8 @@ class _SettingsPageState extends State<SettingsPage> {
         key: ScrapmediaProperty.associateTag.toString(),
         value: awsAssociateTagController.text);
     await storage.write(
-        key: ScrapmediaProperty.useService.toString(), value: _service.toString());
+        key: ScrapmediaProperty.useService.toString(),
+        value: _service.toString());
     await storage.write(
         key: ScrapmediaProperty.bitlyApiKey.toString(),
         value: bitlyApiKeyController.text);
@@ -489,7 +498,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.grey,
               )),
           validator: (value) =>
-          value.isEmpty ? 'Password can\'t be empty' : null,
+              value.isEmpty ? 'Password can\'t be empty' : null,
         ));
   }
 
