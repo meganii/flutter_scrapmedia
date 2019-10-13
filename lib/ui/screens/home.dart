@@ -3,7 +3,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_opendb/flutter_opendb.dart';
-import 'package:flutter_scrapmedia/model/ScrapMediaItem.dart';
+import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:flutter_scrapmedia/model/state.dart';
 import 'package:flutter_scrapmedia/services/service.dart';
 import 'package:flutter_scrapmedia/state_widget.dart';
