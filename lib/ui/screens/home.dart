@@ -56,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<ScrapMediaItem> _fetchItem(String isbn) async {
     ScrapMediaItem item;
-    print(appState.service);
     switch (appState.service) {
       case ScrapmediaServices.openDBAPI:
         var opendb = FlutterOpendb();
