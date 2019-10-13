@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_scrapmedia/model/BitlyItem.dart';
+import 'package:flutter_scrapmedia/model/bitly_item.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
