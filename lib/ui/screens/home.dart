@@ -128,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Row(
                 children: <Widget>[
-                  if (true)
+                  if (isVisible)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () => {tweet(_item)},
                       ),
                     ),
-                  if (true)
+                  if (isVisible)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
