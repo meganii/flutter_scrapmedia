@@ -34,6 +34,7 @@ Future<String> shortUrl(String apiKey, String longUrl) async {
 }
 
 Future<void> openScrapbox(ScrapMediaItem item, String projectName) async {
+  print(projectName);
   String sbUrl = 'https://scrapbox.io/$projectName/';
   await launch(sbUrl +
       Uri.encodeComponent(item.title) +
