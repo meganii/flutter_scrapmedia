@@ -2,11 +2,12 @@ import 'package:apaa/apaa.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_opendb/flutter_opendb.dart';
+import 'package:flutter_scrapmedia/model/appconfig.dart';
+import 'package:flutter_scrapmedia/model/config_key.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
-import 'package:flutter_scrapmedia/model/state.dart';
 import 'package:flutter_scrapmedia/services/service.dart';
-import 'package:flutter_scrapmedia/state_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,11 +15,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  StateModel appState;
   String result = '';
   String imageUrl = '';
   ScrapMediaItem _item;
   bool isVisible = false;
+  AppConfigModel appConfig;
 
   Future _scanCode() async {
     try {
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<ScrapMediaItem> _fetchItem(String isbn) async {
     ScrapMediaItem item;
-    switch (appState.service) {
+    switch (ScrapmediaServices.awsAPI) {
       case ScrapmediaServices.openDBAPI:
         var opendb = FlutterOpendb();
         var result = await opendb.getISBN(isbn);
@@ -72,12 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case ScrapmediaServices.awsAPI:
         var api = APAA(
-            appState.awsAccessKeyIdController.text,
-            appState.awsSecretAccessKeyController.text,
-            appState.awsAssociateTagController.text);
+            appConfig.values[ConfigKey.amazonKey.toString()],
+            appConfig.values[ConfigKey.amazonSecret.toString()],
+            appConfig.values[ConfigKey.amazonTagName.toString()]);
         var result = await api.search(isbn);
         var url = await shortUrl(
-            appState.bitlyApiKeyController.text, result.productUrl);
+            appConfig.values[ConfigKey.bitlyKey.toString()], result.productUrl);
         if (result != null) {
           item = ScrapMediaItem(
               title: result.title,
@@ -96,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Build the content depending on the state:
-    appState = StateWidget.of(context).state;
+    // appState = StateWidget.of(context).state;
+    appConfig = Provider.of<AppConfigModel>(context);
     return _buildContent();
   }
 
@@ -126,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Row(
                 children: <Widget>[
-                  if (true)
+                  if (isVisible)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
@@ -136,14 +138,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () => {tweet(_item)},
                       ),
                     ),
-                  if (true)
+                  if (isVisible)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
                         child: Text('Scrapbox'),
                         textColor: Colors.white,
                         color: Colors.green,
-                        onPressed: () => {openScrapbox(_item, appState.scrapboxProjectNameController.text)},
+                        onPressed: () => {openScrapbox(_item, appConfig.values[ConfigKey.scrapboxProjectName.toString()])},
                       ),
                     ),
                 ],
@@ -163,3 +165,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+enum ScrapmediaServices { openDBAPI, awsAPI }

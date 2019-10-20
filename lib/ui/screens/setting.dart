@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_scrapmedia/model/state.dart';
-import 'package:flutter_scrapmedia/state_widget.dart';
+import 'package:flutter_scrapmedia/model/config_key.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_scrapmedia/model/scrapmedia_property.dart';
 
 enum ScrapmediaServices { openDBAPI, awsAPI }
-
-ScrapmediaServices _service = ScrapmediaServices.openDBAPI;
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -14,45 +12,43 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingScreen> {
-  StateModel appState;
-
   @override
   Widget build(BuildContext context) {
-    appState = StateWidget.of(context).state;
+    var appconfig = Provider.of<AppConfigModel>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Settings"),
         ),
         body: Stack(
           children: <Widget>[
-            _showBody(),
+            _showBody(appconfig),
           ],
         ));
   }
 
   final _formKey = new GlobalKey<FormState>();
 
-  void _saveAll() async {
+  void _saveAll(AppConfigModel appconfig) async {
     final storage = new FlutterSecureStorage();
-
     await storage.write(
-        key: ScrapmediaProperty.projectName.toString(),
-        value: appState.scrapboxProjectNameController.text);
+        key: ConfigKey.scrapboxProjectName.toString(),
+        value: appconfig.values[ConfigKey.scrapboxProjectName.toString()]);
     await storage.write(
-        key: ScrapmediaProperty.accessKey.toString(),
-        value: appState.awsAccessKeyIdController.text);
+        key: ConfigKey.amazonKey.toString(),
+        value: appconfig.values[ConfigKey.amazonKey.toString()]);
     await storage.write(
-        key: ScrapmediaProperty.secretKey.toString(),
-        value: appState.awsSecretAccessKeyController.text);
+        key: ConfigKey.amazonSecret.toString(),
+        value: appconfig.values[ConfigKey.amazonSecret.toString()]);
     await storage.write(
-        key: ScrapmediaProperty.associateTag.toString(),
-        value: appState.awsAssociateTagController.text);
+        key: ConfigKey.amazonTagName.toString(),
+        value: appconfig.values[ConfigKey.amazonTagName.toString()]);
     await storage.write(
-        key: ScrapmediaProperty.useService.toString(),
-        value: _service.toString());
+        key: ConfigKey.appSearchMethod.toString(),
+        value: appconfig.values[ConfigKey.appSearchMethod.toString()]);
     await storage.write(
-        key: ScrapmediaProperty.bitlyApiKey.toString(),
-        value: appState.bitlyApiKeyController.text);
+        key: ConfigKey.bitlyKey.toString(),
+        value: appconfig.values[ConfigKey.bitlyKey.toString()]);
   }
 
 //  @override
@@ -67,31 +63,34 @@ class _SettingsPageState extends State<SettingScreen> {
 //    super.dispose();
 //  }
 
-  Widget _showBody() {
+  Widget _showBody(AppConfigModel appconfig) {
     return Container(
         padding: EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: this._formKey,
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              _showScrapboxInput(),
-              _showRadioButton(),
-              _showEmailInput(),
-              _showPasswordInput(),
-              _showTagInput(),
-              _showBitlyInput(),
-              _showSaveButton(),
+              _showScrapboxInput(appconfig),
+              _showRadioButton(appconfig),
+              _showEmailInput(appconfig),
+              _showPasswordInput(appconfig),
+              _showTagInput(appconfig),
+              _showBitlyInput(appconfig),
+              _showSaveButton(appconfig),
             ],
           ),
         ));
   }
 
-  Widget _showScrapboxInput() {
+  Widget _showScrapboxInput(AppConfigModel appconfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
       child: TextFormField(
-        controller: appState.scrapboxProjectNameController,
+        initialValue: appconfig.values[ConfigKey.scrapboxProjectName.toString()],
+        onSaved: (text) {
+          appconfig.update(ConfigKey.scrapboxProjectName.toString(), text);
+        },
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
@@ -105,7 +104,9 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showRadioButton() {
+  Widget _showRadioButton(AppConfigModel appconfig) {
+    var searchMethod = appconfig.values[ConfigKey.appSearchMethod.toString()];
+
     return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: Column(
@@ -114,35 +115,36 @@ class _SettingsPageState extends State<SettingScreen> {
               'Which API do you use',
               textAlign: TextAlign.left,
             ),
-            RadioListTile<ScrapmediaServices>(
+            RadioListTile<String>(
               title: const Text('openDB API'),
-              value: ScrapmediaServices.openDBAPI,
-              groupValue: _service,
-              onChanged: (ScrapmediaServices value) {
-                setState(() {
-                  _service = value;
-                });
+              value: ScrapmediaServices.openDBAPI.toString(),
+              groupValue: searchMethod,
+              onChanged: (String value) {
+                appconfig.update(
+                    ConfigKey.appSearchMethod.toString(), value.toString());
               },
             ),
-            RadioListTile<ScrapmediaServices>(
+            RadioListTile<String>(
               title: const Text('Amazon Product Advertising API'),
-              value: ScrapmediaServices.awsAPI,
-              groupValue: _service,
-              onChanged: (ScrapmediaServices value) {
-                setState(() {
-                  _service = value;
-                });
+              value: ScrapmediaServices.awsAPI.toString(),
+              groupValue: searchMethod,
+              onChanged: (String value) {
+                appconfig.update(
+                    ConfigKey.appSearchMethod.toString(), value.toString());
               },
             ),
           ],
         ));
   }
 
-  Widget _showEmailInput() {
+  Widget _showEmailInput(AppConfigModel appconfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: TextFormField(
-        controller: appState.awsAccessKeyIdController,
+        initialValue: appconfig.values[ConfigKey.amazonKey.toString()],
+        onSaved: (text) {
+          appconfig.update(ConfigKey.amazonKey.toString(), text);
+        },
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
@@ -156,11 +158,14 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showPasswordInput() {
+  Widget _showPasswordInput(AppConfigModel appconfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
-        controller: appState.awsSecretAccessKeyController,
+        initialValue: appconfig.values[ConfigKey.amazonSecret.toString()],
+        onSaved: (text) {
+          appconfig.update(ConfigKey.amazonSecret.toString(), text);
+        },
         maxLines: 1,
         obscureText: true,
         autofocus: false,
@@ -175,11 +180,14 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showTagInput() {
+  Widget _showTagInput(AppConfigModel appconfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
-        controller: appState.awsAssociateTagController,
+        initialValue: appconfig.values[ConfigKey.amazonTagName.toString()],
+        onSaved: (text) {
+          appconfig.update(ConfigKey.amazonTagName.toString(), text);
+        },
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
@@ -193,11 +201,14 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showBitlyInput() {
+  Widget _showBitlyInput(AppConfigModel appconfig) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: new TextFormField(
-          controller: appState.bitlyApiKeyController,
+          initialValue: appconfig.values[ConfigKey.bitlyKey.toString()],
+          onSaved: (text) {
+            appconfig.update(ConfigKey.bitlyKey.toString(), text);
+          },
           maxLines: 1,
           obscureText: true,
           autofocus: false,
@@ -212,13 +223,14 @@ class _SettingsPageState extends State<SettingScreen> {
         ));
   }
 
-  Widget _showSaveButton() {
+  Widget _showSaveButton(AppConfigModel appconfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: RaisedButton(
         child: Text('Submit'),
         onPressed: () {
-          _saveAll();
+          this._formKey.currentState.save();
+          _saveAll(appconfig);
         },
       ),
     );

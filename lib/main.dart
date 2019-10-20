@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'package:flutter_scrapmedia/app.dart';
-import 'package:flutter_scrapmedia/state_widget.dart';
+import 'package:flutter_scrapmedia/model/appconfig.dart';
 
-// - StateWidget incl. state data
-//    - ScrapmediaApp
-//        - All other widgets which are able to access the data
 void main() {
-  StateWidget stateWidget = new StateWidget(child:new ScrapmediaApp());
-  runApp(stateWidget);
+  runApp(
+    ChangeNotifierProvider(
+      builder: (context) => AppConfigModel(),
+      child: ScrapmediaApp(),
+    ),
+  );
 }

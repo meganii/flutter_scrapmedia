@@ -36,6 +36,7 @@ dependencies:
       url: git@github.com:meganii/flutter_opendb.git
       ref: master
   flutter_launcher_icons: ^0.7.2
+  provider: ^3.0.0
 
 dev_dependencies:
   flutter_test:
