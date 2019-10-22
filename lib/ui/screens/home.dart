@@ -57,8 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<ScrapMediaItem> _fetchItem(String isbn) async {
     ScrapMediaItem item;
-    switch (ScrapmediaServices.awsAPI) {
-      case ScrapmediaServices.openDBAPI:
+    var method = appConfig.values[ConfigKey.appSearchMethod.toString()];
+    switch (method) {
+      case "openDBAPI":
         var opendb = FlutterOpendb();
         var result = await opendb.getISBN(isbn);
         if (result != null) {
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           isVisible = true;
         }
         break;
-      case ScrapmediaServices.awsAPI:
+      case "awsAPI":
         var api = APAA(
             appConfig.values[ConfigKey.amazonKey.toString()],
             appConfig.values[ConfigKey.amazonSecret.toString()],
