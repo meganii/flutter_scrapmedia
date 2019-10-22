@@ -11,7 +11,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/launcher_icon"
-        android:label="flutter_scrapmedia">
+        android:label="ScrapMedia">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
