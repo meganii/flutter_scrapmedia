@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ScrapMediaItem item;
     var method = appConfig.values[ConfigKey.appSearchMethod.toString()];
     switch (method) {
-      case "openDBAPI":
+      case "ScrapmediaServices.openDBAPI":
         var opendb = FlutterOpendb();
         var result = await opendb.getISBN(isbn);
         if (result != null) {
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           isVisible = true;
         }
         break;
-      case "awsAPI":
+      case "ScrapmediaServices.awsAPI":
         var api = APAA(
             appConfig.values[ConfigKey.amazonKey.toString()],
             appConfig.values[ConfigKey.amazonSecret.toString()],
@@ -90,6 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
               affiliateUrl: url);
           isVisible = true;
         }
+        break;
+      default:
+        print("default");
         break;
     }
     return item;
