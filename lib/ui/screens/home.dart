@@ -1,12 +1,11 @@
-import 'package:apaa/apaa.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_opendb/flutter_opendb.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
+import 'package:flutter_scrapmedia/model/data.dart';
 import 'package:flutter_scrapmedia/services/service.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -21,11 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
   ScrapMediaItem _item;
   bool isVisible = false;
   AppConfigModel appConfig;
+  AppDataModel appData;
 
   Future _scanCode() async {
     try {
       String qrResult = await BarcodeScanner.scan();
-      var item = await _fetchItem(qrResult);
+      var item = await fetchItem(qrResult, appConfig);
       setState(() {
         if (item != null) {
           _item = item;
@@ -56,49 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<ScrapMediaItem> _fetchItem(String isbn) async {
-    ScrapMediaItem item;
-    var method = appConfig.values[ConfigKey.appSearchMethod.toString()];
-    switch (method) {
-      case "ScrapmediaServices.openDBAPI":
-        var opendb = FlutterOpendb();
-        var result = await opendb.getISBN(isbn);
-        if (result != null) {
-          item = ScrapMediaItem(
-            title: result.title,
-            cover: result.cover,
-            author: result.author,
-            publisher: result.publisher,
-          );
-          isVisible = true;
-        }
-        break;
-      case "ScrapmediaServices.awsAPI":
-        var api = APAA(
-            appConfig.values[ConfigKey.amazonKey.toString()],
-            appConfig.values[ConfigKey.amazonSecret.toString()],
-            appConfig.values[ConfigKey.amazonTagName.toString()]);
-        var result = await api.search(isbn);
-        var url = await shortUrl(
-            appConfig.values[ConfigKey.bitlyKey.toString()], result.productUrl);
-        if (result != null) {
-          item = ScrapMediaItem(
-              title: result.title,
-              cover: result.image.url,
-              author: result.author,
-              publisher: result.publisher,
-              asin: result.asin,
-              affiliateUrl: url);
-          isVisible = true;
-        }
-        break;
-      default:
-        print("default");
-        break;
-    }
-    return item;
-  }
-
   @override
   Widget build(BuildContext context) {
     // Build the content depending on the state:
@@ -111,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Scrap Media"), actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.more_vert),
-          tooltip: 'More vertical',
+          icon: const Icon(Icons.settings_applications),
+          tooltip: 'Settings',
           onPressed: () {
             Navigator.pushNamed(context, '/setting');
           },
