@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
-import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:flutter_scrapmedia/model/data.dart';
 import 'package:flutter_scrapmedia/services/service.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -15,10 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String result = '';
-  String imageUrl = '';
-  ScrapMediaItem _item;
-  bool isVisible = false;
+  String result;
   AppConfigModel appConfig;
   AppDataModel appData;
 
@@ -26,41 +22,30 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       String qrResult = await BarcodeScanner.scan();
       var item = await fetchItem(qrResult, appConfig);
-      setState(() {
-        if (item != null) {
-          _item = item;
-          result = item.title;
-          imageUrl = item.cover;
-        } else {
-          result = '見つかりませんでした';
-        }
-      });
+      if (item != null) {
+        appData.updateItem(item);
+        appData.updateVisibleShareButtons(true);
+      } else {
+        appData.updateMessage('見つかりませんでした');
+      }
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          result = "Camera permission was denied";
-        });
+        appData.updateMessage('Camera permission was denied');
       } else {
-        setState(() {
-          result = "Unknown Error $ex";
-        });
+        appData.updateMessage("Unknown Error $ex");
       }
     } on FormatException {
-      setState(() {
-        result = "You pressed the back button before scanning anything";
-      });
+      appData.updateMessage('You pressed the back button before scanning anything');
     } catch (ex) {
-      setState(() {
-        result = "Unknown Error $ex";
-      });
+      appData.updateMessage("Unknown Error $ex");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     // Build the content depending on the state:
-    // appState = StateWidget.of(context).state;
     appConfig = Provider.of<AppConfigModel>(context);
+    appData = Provider.of<AppDataModel>(context);
     return _buildContent();
   }
 
@@ -80,34 +65,36 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                result,
-                style: TextStyle(fontSize: 40.0),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Image.network(imageUrl),
-              ),
+              if (appData?.item?.title != null)
+                Text(
+                  appData?.item?.title,
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              if (appData?.item?.cover != null)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Image.network(appData.item.cover),
+                ),
               Row(
                 children: <Widget>[
-                  if (isVisible)
+                  if (appData.visibleShareButtons)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
                         child: Text('Tweet'),
                         textColor: Colors.white,
                         color: Colors.blue,
-                        onPressed: () => {tweet(_item)},
+                        onPressed: () => {tweet(appData.item)},
                       ),
                     ),
-                  if (isVisible)
+                  if (appData.visibleShareButtons)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
                         child: Text('Scrapbox'),
                         textColor: Colors.white,
                         color: Colors.green,
-                        onPressed: () => {openScrapbox(_item, appConfig.values[ConfigKey.scrapboxProjectName.toString()])},
+                        onPressed: () => {openScrapbox(appData.item, appConfig.values[ConfigKey.scrapboxProjectName.toString()])},
                       ),
                     ),
                 ],
