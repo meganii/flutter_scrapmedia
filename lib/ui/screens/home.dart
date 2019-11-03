@@ -8,6 +8,7 @@ import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:flutter_scrapmedia/services/service.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -159,13 +160,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.camera_alt),
-        label: Text('Scan'),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.search_ellipsis,
+        animatedIconTheme: IconThemeData(),
         backgroundColor: Colors.green,
-        onPressed: _scanCode,
+        children: [
+            SpeedDialChild(
+              child: Icon(Icons.search),
+              backgroundColor: Colors.green[300],
+              label: 'ISBN検索',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => Navigator.pushNamed(context, '/search')
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.camera_alt),
+              backgroundColor: Colors.grey,
+              label: 'ISBNコード読取',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => _scanCode(),
+            ),
+          ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
