@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_scrapmedia/ui/screens/home.dart';
+import 'package:flutter_scrapmedia/ui/screens/search.dart';
 import 'package:flutter_scrapmedia/ui/screens/setting.dart';
 
 class ScrapmediaApp extends StatelessWidget {
@@ -15,6 +16,7 @@ class ScrapmediaApp extends StatelessWidget {
       routes: {
         '/': (context) => HomeScreen(),
         '/setting': (context) => SettingScreen(),
+        '/search': (context) => SearchScreen()
       },
     );
   }
