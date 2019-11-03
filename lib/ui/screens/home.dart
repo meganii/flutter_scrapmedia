@@ -111,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Scrap Media"), actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.more_vert),
-          tooltip: 'More vertical',
+          icon: const Icon(Icons.settings_applications),
+          tooltip: 'Settings',
           onPressed: () {
             Navigator.pushNamed(context, '/setting');
           },
