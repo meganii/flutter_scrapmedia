@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future _scanCode() async {
     try {
       String qrResult = await BarcodeScanner.scan();
-      var item = await _fetchItem(qrResult);
+      var item = await fetchItem(qrResult, appConfig);
       setState(() {
         if (item != null) {
           _item = item;
