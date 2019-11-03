@@ -2,10 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_scrapmedia/model/bitly_item.dart';
+import 'package:flutter_scrapmedia/model/config_key.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:apaa/apaa.dart';
+import 'package:flutter_opendb/flutter_opendb.dart';
+import 'package:flutter_scrapmedia/model/appconfig.dart';
 
 Future<void> tweet(ScrapMediaItem item) async {
   var content;
@@ -53,3 +58,44 @@ String _createBody(ScrapMediaItem item) {
   body += '#本';
   return body;
 }
+
+Future<ScrapMediaItem> fetchItem(String isbn, AppConfigModel appConfig) async {
+    ScrapMediaItem item;
+    var method = appConfig.values[ConfigKey.appSearchMethod.toString()];
+    switch (method) {
+      case "ScrapmediaServices.openDBAPI":
+        var opendb = FlutterOpendb();
+        var result = await opendb.getISBN(isbn);
+        if (result != null) {
+          item = ScrapMediaItem(
+            title: result.title,
+            cover: result.cover,
+            author: result.author,
+            publisher: result.publisher,
+          );
+        }
+        break;
+      case "ScrapmediaServices.awsAPI":
+        var api = APAA(
+            appConfig.values[ConfigKey.amazonKey.toString()],
+            appConfig.values[ConfigKey.amazonSecret.toString()],
+            appConfig.values[ConfigKey.amazonTagName.toString()]);
+        var result = await api.search(isbn);
+        var url = await shortUrl(
+            appConfig.values[ConfigKey.bitlyKey.toString()], result.productUrl);
+        if (result != null) {
+          item = ScrapMediaItem(
+              title: result.title,
+              cover: result.image.url,
+              author: result.author,
+              publisher: result.publisher,
+              asin: result.asin,
+              affiliateUrl: url);
+        }
+        break;
+      default:
+        print("default");
+        break;
+    }
+    return item;
+  }
