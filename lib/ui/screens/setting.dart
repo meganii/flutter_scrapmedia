@@ -31,24 +31,36 @@ class _SettingsPageState extends State<SettingScreen> {
 
   void _saveAll(AppConfigModel appconfig) async {
     final storage = new FlutterSecureStorage();
-    await storage.write(
+    if (appconfig.values[ConfigKey.scrapboxProjectName.toString()] != null) {
+      await storage.write(
         key: ConfigKey.scrapboxProjectName.toString(),
         value: appconfig.values[ConfigKey.scrapboxProjectName.toString()]);
-    await storage.write(
-        key: ConfigKey.amazonKey.toString(),
-        value: appconfig.values[ConfigKey.amazonKey.toString()]);
-    await storage.write(
-        key: ConfigKey.amazonSecret.toString(),
-        value: appconfig.values[ConfigKey.amazonSecret.toString()]);
-    await storage.write(
-        key: ConfigKey.amazonTagName.toString(),
-        value: appconfig.values[ConfigKey.amazonTagName.toString()]);
-    await storage.write(
-        key: ConfigKey.appSearchMethod.toString(),
-        value: appconfig.values[ConfigKey.appSearchMethod.toString()]);
-    await storage.write(
-        key: ConfigKey.bitlyKey.toString(),
-        value: appconfig.values[ConfigKey.bitlyKey.toString()]);
+    }
+    if (appconfig.values[ConfigKey.amazonKey.toString()] != null) {
+      await storage.write(
+          key: ConfigKey.amazonKey.toString(),
+          value: appconfig.values[ConfigKey.amazonKey.toString()]);
+    }
+    if (appconfig.values[ConfigKey.amazonSecret.toString()] != null) {
+      await storage.write(
+          key: ConfigKey.amazonSecret.toString(),
+          value: appconfig.values[ConfigKey.amazonSecret.toString()]);
+    }
+    if (appconfig.values[ConfigKey.amazonTagName.toString()] != null) {
+      await storage.write(
+          key: ConfigKey.amazonTagName.toString(),
+          value: appconfig.values[ConfigKey.amazonTagName.toString()]);
+    }
+    if (appconfig.values[ConfigKey.appSearchMethod.toString()] != null) {
+      await storage.write(
+          key: ConfigKey.appSearchMethod.toString(),
+          value: appconfig.values[ConfigKey.appSearchMethod.toString()]);
+    }
+    if (appconfig.values[ConfigKey.bitlyKey.toString()] != null) {
+      await storage.write(
+          key: ConfigKey.bitlyKey.toString(),
+          value: appconfig.values[ConfigKey.bitlyKey.toString()]);
+    }
   }
 
 //  @override
