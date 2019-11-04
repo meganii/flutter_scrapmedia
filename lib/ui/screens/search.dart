@@ -4,16 +4,12 @@ import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
 
-import 'package:flutter_scrapmedia/services/service.dart';
-
 class SearchScreen extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   String isbn;
   AppConfigModel appConfig;
   ScrapMediaItem item;
@@ -21,7 +17,6 @@ class _SearchPageState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     appConfig = Provider.of<AppConfigModel>(context);
     appData = Provider.of<AppDataModel>(context);
 
@@ -51,24 +46,13 @@ class _SearchPageState extends State<SearchScreen> {
         keyboardType: TextInputType.text,
         autofocus: true,
         decoration: InputDecoration(
-            hintText: 'Input search word',
-            suffixIcon: Padding(
-              padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-              child: IconButton(
+          hintText: 'Input search word',
+          suffixIcon: Padding(
+            padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+            child: IconButton(
                 icon: Icon(Icons.search),
-                onPressed:  () async {
-                  print('search');
-                  item = await fetchItem(isbn, appConfig);
-                  if (item != null) {
-                    appData.updateItem(item);
-                    appData.updateVisibleShareButtons(true);
-                    Navigator.pop(context);
-                  } else {
-                    appData.updateMessage('見つかりませんでした');
-                  }
-                },
-              ),
-            ),
+                onPressed: () => {Navigator.pop(context, isbn)}),
+          ),
         ),
       ),
     );

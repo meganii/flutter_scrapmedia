@@ -1,6 +1,7 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_scrapmedia/ui/screens/search.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
@@ -17,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String result;
   AppConfigModel appConfig;
   AppDataModel appData;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Future _scanCode() async {
     try {
@@ -35,7 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
         appData.updateMessage("Unknown Error $ex");
       }
     } on FormatException {
-      appData.updateMessage('You pressed the back button before scanning anything');
+      appData.updateMessage(
+          'You pressed the back button before scanning anything');
     } catch (ex) {
       appData.updateMessage("Unknown Error $ex");
     }
@@ -46,11 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
     // Build the content depending on the state:
     appConfig = Provider.of<AppConfigModel>(context);
     appData = Provider.of<AppDataModel>(context);
-    return _buildContent();
+    if (appData?.message != null) {
+      _scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(appData.message)));
+      appData.updateMessage(null);
+    }
+    return _buildContent(context);
   }
 
-  _buildContent() {
+  _buildContent(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(title: Text("Scrap Media"), actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.settings_applications),
@@ -94,7 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text('Scrapbox'),
                         textColor: Colors.white,
                         color: Colors.green,
-                        onPressed: () => {openScrapbox(appData.item, appConfig.values[ConfigKey.scrapboxProjectName.toString()])},
+                        onPressed: () => {
+                          openScrapbox(
+                              appData.item,
+                              appConfig.values[
+                                  ConfigKey.scrapboxProjectName.toString()])
+                        },
                       ),
                     ),
                 ],
@@ -109,23 +125,40 @@ class _HomeScreenState extends State<HomeScreen> {
         animatedIconTheme: IconThemeData(),
         backgroundColor: Colors.green,
         children: [
-            SpeedDialChild(
-              child: Icon(Icons.search),
-              backgroundColor: Colors.green[300],
-              label: 'ISBN検索',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => Navigator.pushNamed(context, '/search')
-            ),
-            SpeedDialChild(
-              child: Icon(Icons.camera_alt),
-              backgroundColor: Colors.grey,
-              label: 'ISBNコード読取',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => _scanCode(),
-            ),
-          ],
+          SpeedDialChild(
+            child: Icon(Icons.search),
+            backgroundColor: Colors.green[300],
+            label: 'ISBN検索',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => {_navigateAndDisplaySelection(context, appConfig)},
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.camera_alt),
+            backgroundColor: Colors.grey,
+            label: 'ISBNコード読取',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => _scanCode(),
+          ),
+        ],
       ),
     );
+  }
+
+  _navigateAndDisplaySelection(
+      BuildContext context, AppConfigModel appConfig) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final isbn = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchScreen()),
+    );
+    var item = await fetchItem(isbn, appConfig);
+    if (item != null) {
+      appData.updateItem(item);
+      appData.updateVisibleShareButtons(true);
+    } else {
+      appData.updateMessage('見つかりませんでした');
+    }
   }
 }
 
