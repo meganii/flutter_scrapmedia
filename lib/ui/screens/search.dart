@@ -1,25 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_scrapmedia/model/data.dart';
-import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_scrapmedia/model/appconfig.dart';
 
-class SearchScreen extends StatefulWidget {
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchScreen> {
-  String isbn;
-  AppConfigModel appConfig;
-  ScrapMediaItem item;
-  AppDataModel appData;
-
+class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    appConfig = Provider.of<AppConfigModel>(context);
-    appData = Provider.of<AppDataModel>(context);
-
     return Scaffold(
         appBar: AppBar(
           title: Text('Search'),
@@ -29,18 +12,20 @@ class _SearchPageState extends State<SearchScreen> {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              _showText(),
+              _showText(context),
             ],
           ),
         ));
   }
 
-  Widget _showText() {
+  Widget _showText(BuildContext context) {
+    String _isbn;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(5.0, 100.0, 5.0, 0.0),
       child: TextField(
         onChanged: (text) {
-          isbn = text;
+          _isbn = text;
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -51,7 +36,7 @@ class _SearchPageState extends State<SearchScreen> {
             padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
             child: IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () => {Navigator.pop(context, isbn)}),
+                onPressed: () => {Navigator.pop(context, _isbn)}),
           ),
         ),
       ),
