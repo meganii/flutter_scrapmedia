@@ -1,6 +1,6 @@
-import 'package:barcode_scan/barcode_scan.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_scrapmedia/ui/screens/search.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
@@ -15,53 +15,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String result;
-  AppConfigModel appConfig;
-  AppDataModel appData;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  Future _scanCode() async {
-    try {
-      String qrResult = await BarcodeScanner.scan();
-      var item = await fetchItem(qrResult, appConfig);
-      if (item != null) {
-        appData.updateItem(item);
-        appData.updateVisibleShareButtons(true);
-      } else {
-        appData.updateMessage('見つかりませんでした');
-      }
-    } on PlatformException catch (ex) {
-      if (ex.code == BarcodeScanner.CameraAccessDenied) {
-        appData.updateMessage('Camera permission was denied');
-      } else {
-        appData.updateMessage("Unknown Error $ex");
-      }
-    } on FormatException {
-      appData.updateMessage(
-          'You pressed the back button before scanning anything');
-    } catch (ex) {
-      appData.updateMessage("Unknown Error $ex");
-    }
-  }
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    // Build the content depending on the state:
-    appConfig = Provider.of<AppConfigModel>(context);
-    appData = Provider.of<AppDataModel>(context);
+    final appConfig = Provider.of<AppConfigModel>(context);
+    final appData = Provider.of<AppDataModel>(context);
+    
     if (appData?.message != null) {
       _scaffoldKey.currentState
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text(appData.message)));
       appData.updateMessage(null);
     }
-    return _buildContent(context);
+    return _buildContent(context, appConfig, appData, _scaffoldKey);
   }
 
-  _buildContent(BuildContext context) {
+  _buildContent(BuildContext context, AppConfigModel appConfig,
+      AppDataModel appData, GlobalKey<ScaffoldState> scaffoldKey) {
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(title: Text("Scrap Media"), actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.settings_applications),
@@ -130,14 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.green[300],
             label: 'ISBN検索',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => {_navigateAndDisplaySelection(context, appConfig)},
+            onTap: () => {_navigateAndDisplaySelection(context, appConfig, appData)},
           ),
           SpeedDialChild(
             child: Icon(Icons.camera_alt),
             backgroundColor: Colors.grey,
             label: 'ISBNコード読取',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => _scanCode(),
+            onTap: () => scanCode(appConfig, appData),
           ),
         ],
       ),
@@ -145,9 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _navigateAndDisplaySelection(
-      BuildContext context, AppConfigModel appConfig) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
+      BuildContext context, AppConfigModel appConfig, AppDataModel appData) async {
     final isbn = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SearchScreen()),
