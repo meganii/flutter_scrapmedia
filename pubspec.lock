@@ -91,16 +91,16 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.3"
+    version: "0.7.4"
   flutter_openbd:
     dependency: "direct main"
     description:
       path: "."
       ref: master
-      resolved-ref: f29b718d3ffe32c9eb141dfebf2f55f3ba1f51db
+      resolved-ref: "5a2577606fa526c9db5ed8fd2b74bbcdd060ae76"
       url: "git@github.com:meganii/flutter_openbd.git"
     source: git
-    version: "0.0.3"
+    version: "0.0.4"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -203,7 +203,7 @@ packages:
       name: share
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.2+4"
+    version: "0.6.3+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -264,7 +264,14 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.2.5"
+  url_launcher_platform_interface:
+    dependency: transitive
+    description:
+      name: url_launcher_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   vector_math:
     dependency: transitive
     description:
@@ -295,4 +302,4 @@ packages:
     version: "2.2.0"
 sdks:
   dart: ">=2.4.0 <3.0.0"
-  flutter: ">=1.6.0 <2.0.0"
+  flutter: ">=1.9.1+hotfix.4 <2.0.0"

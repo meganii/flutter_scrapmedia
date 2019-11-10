@@ -107,7 +107,7 @@ Future<ScrapMediaItem> fetchItem(String isbn, AppConfigModel appConfig) async {
           appConfig.values[ConfigKey.amazonKey.toString()],
           appConfig.values[ConfigKey.amazonSecret.toString()],
           appConfig.values[ConfigKey.amazonTagName.toString()]);
-      var result = await api.search(isbn);
+      var result = await api.search(isbn).catchError((e) => print(e));
       var url = await shortUrl(
           appConfig.values[ConfigKey.bitlyKey.toString()], result.productUrl);
       if (result != null) {
