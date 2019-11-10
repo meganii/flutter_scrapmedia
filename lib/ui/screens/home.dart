@@ -55,11 +55,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   appData?.item?.title,
                   style: TextStyle(fontSize: 40.0),
                 ),
-              if (appData?.item?.cover != null)
+              (appData?.item?.cover != null) ? 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: Image.network(appData.item.cover),
-                ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                  child: Image.asset('assets/images/scrapmedia_icon.png'),
+                )
+              ,
               Row(
                 children: <Widget>[
                   if (appData.visibleShareButtons)
