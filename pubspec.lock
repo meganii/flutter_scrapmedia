@@ -92,15 +92,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.3"
-  flutter_opendb:
+  flutter_openbd:
     dependency: "direct main"
     description:
       path: "."
       ref: master
-      resolved-ref: "56636893989d903056a2008e1d13948a64947422"
-      url: "git@github.com:meganii/flutter_opendb.git"
+      resolved-ref: f29b718d3ffe32c9eb141dfebf2f55f3ba1f51db
+      url: "git@github.com:meganii/flutter_openbd.git"
     source: git
-    version: "0.0.2"
+    version: "0.0.3"
   flutter_secure_storage:
     dependency: "direct main"
     description:

@@ -139,4 +139,4 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-enum ScrapmediaServices { openDBAPI, awsAPI }
+enum ScrapmediaServices { openBDAPI, awsAPI }

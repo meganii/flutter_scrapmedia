@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-enum ScrapmediaServices { openDBAPI, awsAPI }
+enum ScrapmediaServices { openBDAPI, awsAPI }
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -128,8 +128,8 @@ class _SettingsPageState extends State<SettingScreen> {
               textAlign: TextAlign.left,
             ),
             RadioListTile<String>(
-              title: const Text('openDB API'),
-              value: ScrapmediaServices.openDBAPI.toString(),
+              title: const Text('openBD API'),
+              value: ScrapmediaServices.openBDAPI.toString(),
               groupValue: searchMethod,
               onChanged: (String value) {
                 appconfig.update(

@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:apaa/apaa.dart';
-import 'package:flutter_opendb/flutter_opendb.dart';
+import 'package:flutter_openbd/flutter_openbd.dart';
 import 'package:flutter_scrapmedia/model/appconfig.dart';
 
 Future scanCode(AppConfigModel appConfig, AppDataModel appData) async {
@@ -90,9 +90,9 @@ Future<ScrapMediaItem> fetchItem(String isbn, AppConfigModel appConfig) async {
   ScrapMediaItem item;
   var method = appConfig.values[ConfigKey.appSearchMethod.toString()];
   switch (method) {
-    case "ScrapmediaServices.openDBAPI":
-      var opendb = FlutterOpendb();
-      var result = await opendb.getISBN(isbn);
+    case "ScrapmediaServices.openBDAPI":
+      var openbd = FlutterOpenBD();
+      var result = await openbd.getISBN(isbn);
       if (result != null) {
         item = ScrapMediaItem(
           title: result.title,

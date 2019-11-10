@@ -31,9 +31,9 @@ dependencies:
     git:
       url: git@github.com:meganii/flutter-amazon-product-advertising-api.git
       ref: master
-  flutter_opendb:
+  flutter_openbd:
     git:
-      url: git@github.com:meganii/flutter_opendb.git
+      url: git@github.com:meganii/flutter_openbd.git
       ref: master
   flutter_launcher_icons: ^0.7.2
   provider: ^3.0.0
