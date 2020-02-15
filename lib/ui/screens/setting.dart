@@ -63,18 +63,6 @@ class _SettingsPageState extends State<SettingScreen> {
     }
   }
 
-//  @override
-//  void dispose() {
-//    // Clean up the controller when the widget is disposed.
-//    appState.awsAccessKeyIdController.dispose();
-//    appState.awsAccessKeyIdController.dispose();
-//    appState.awsSecretAccessKeyController.dispose();
-//    appState.awsAssociateTagController.dispose();
-//    appState.scrapboxProjectNameController.dispose();
-//    appState.bitlyApiKeyController.dispose();
-//    super.dispose();
-//  }
-
   Widget _showBody(AppConfigModel appConfig) {
     return Container(
         padding: EdgeInsets.all(16.0),
