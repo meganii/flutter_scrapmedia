@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_scrapmedia/ui/screens/home.dart';
 import 'package:flutter_scrapmedia/ui/screens/setting.dart';
 

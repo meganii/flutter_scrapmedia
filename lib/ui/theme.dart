@@ -20,8 +20,7 @@ ThemeData buildTheme() {
         caption: base.caption.copyWith(
           color: const Color(0xFFCCC5AF),
         ),
-        body1: base.body1.copyWith(color: const Color(0xFF807A6B))
-    );
+        body1: base.body1.copyWith(color: const Color(0xFF807A6B)));
   }
 
   // We want to override a default light blue theme.
@@ -43,7 +42,5 @@ ThemeData buildTheme() {
       tabBarTheme: base.tabBarTheme.copyWith(
         labelColor: const Color(0xFF807A6B),
         unselectedLabelColor: const Color(0xFFCCC5AF),
-
-      )
-  );
+      ));
 }

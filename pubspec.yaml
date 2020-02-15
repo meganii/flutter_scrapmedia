@@ -36,7 +36,7 @@ dependencies:
       url: git@github.com:meganii/flutter_openbd.git
       ref: master
   flutter_launcher_icons: ^0.7.2
-  provider: ^3.0.0
+  provider: ^4.0.4
   flutter_speed_dial: ^1.2.4
 
 dev_dependencies:

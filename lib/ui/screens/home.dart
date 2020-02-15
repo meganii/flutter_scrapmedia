@@ -1,13 +1,11 @@
-
 import 'package:flutter/material.dart';
-
-import 'package:flutter_scrapmedia/ui/screens/search.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_scrapmedia/model/appconfig.dart';
+import 'package:flutter_scrapmedia/model/app_config.dart';
+import 'package:flutter_scrapmedia/model/app_state.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
-import 'package:flutter_scrapmedia/model/data.dart';
 import 'package:flutter_scrapmedia/services/service.dart';
+import 'package:flutter_scrapmedia/ui/screens/search.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,25 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final appConfig = Provider.of<AppConfigModel>(context);
-    final appData = Provider.of<AppDataModel>(context);
-    
-    if (appData?.message != null) {
+    final appState = Provider.of<AppStateModel>(context);
+
+    if (appState?.message != null) {
       _scaffoldKey.currentState
         ..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(appData.message)));
-      appData.updateMessage(null);
+        ..showSnackBar(SnackBar(content: Text(appState.message)));
+      appState.updateMessage(null);
     }
-    return _buildContent(context, appConfig, appData, _scaffoldKey);
+    return _buildContent(context, appConfig, appState, _scaffoldKey);
   }
 
   _buildContent(BuildContext context, AppConfigModel appConfig,
-      AppDataModel appData, GlobalKey<ScaffoldState> scaffoldKey) {
+      AppStateModel appState, GlobalKey<ScaffoldState> scaffoldKey) {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(title: Text("Scrap Media"), actions: <Widget>[
@@ -50,34 +47,33 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              if (appData?.item?.title != null)
+              if (appState?.item?.title != null)
                 Text(
-                  appData?.item?.title,
+                  appState?.item?.title,
                   style: TextStyle(fontSize: 40.0),
                 ),
-              (appData?.item?.cover != null) ? 
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  child: Image.network(appData.item.cover),
-                )
-              : Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                  child: Image.asset('assets/images/scrapmedia_icon.png'),
-                )
-              ,
+              (appState?.item?.cover != null)
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Image.network(appState.item.cover),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                      child: Image.asset('assets/images/scrapmedia_icon.png'),
+                    ),
               Row(
                 children: <Widget>[
-                  if (appData.visibleShareButtons)
+                  if (appState.visibleShareButtons)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
                         child: Text('Tweet'),
                         textColor: Colors.white,
                         color: Colors.blue,
-                        onPressed: () => {tweet(appData.item)},
+                        onPressed: () => {tweet(appState.item)},
                       ),
                     ),
-                  if (appData.visibleShareButtons)
+                  if (appState.visibleShareButtons)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                       child: FlatButton(
@@ -86,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.green,
                         onPressed: () => {
                           openScrapbox(
-                              appData.item,
+                              appState.item,
                               appConfig.values[
                                   ConfigKey.scrapboxProjectName.toString()])
                         },
@@ -109,22 +105,23 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.green[300],
             label: 'ISBN検索',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => {_navigateAndDisplaySelection(context, appConfig, appData)},
+            onTap: () =>
+                {_navigateAndDisplaySelection(context, appConfig, appState)},
           ),
           SpeedDialChild(
             child: Icon(Icons.camera_alt),
             backgroundColor: Colors.grey,
             label: 'ISBNコード読取',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => scanCode(appConfig, appData),
+            onTap: () => scanCode(appConfig, appState),
           ),
         ],
       ),
     );
   }
 
-  _navigateAndDisplaySelection(
-      BuildContext context, AppConfigModel appConfig, AppDataModel appData) async {
+  _navigateAndDisplaySelection(BuildContext context, AppConfigModel appConfig,
+      AppStateModel appData) async {
     final isbn = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SearchScreen()),
