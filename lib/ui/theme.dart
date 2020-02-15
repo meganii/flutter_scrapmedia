@@ -5,22 +5,11 @@ ThemeData buildTheme() {
   // in this method:
   TextTheme _buildTextTheme(TextTheme base) {
     return base.copyWith(
-        headline: base.headline.copyWith(
-          fontFamily: 'Merriweather',
-          fontSize: 40.0,
-          color: const Color(0xFF807A6B),
-        ),
-        // Used for the recipes' title:
-        title: base.title.copyWith(
-          fontFamily: 'Merriweather',
-          fontSize: 15.0,
-          color: const Color(0xFF807A6B),
-        ),
         // Used for the recipes' duration:
         caption: base.caption.copyWith(
           color: const Color(0xFFCCC5AF),
         ),
-        body1: base.body1.copyWith(color: const Color(0xFF807A6B)));
+    );
   }
 
   // We want to override a default light blue theme.
