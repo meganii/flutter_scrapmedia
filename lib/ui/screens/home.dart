@@ -7,6 +7,8 @@ import 'package:flutter_scrapmedia/ui/screens/search.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
+enum ScrapmediaServices { openBDAPI, awsAPI }
+
 class HomeScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _HomeScreenState();
@@ -42,81 +44,104 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         )
       ]),
-      body: SingleChildScrollView(
+      body: _ScrollView(appConfig, appState),
+      floatingActionButton: _SpeedDialSearchButton(appConfig, appState),
+    );
+  }
+}
+
+class _ScrollView extends StatelessWidget {
+  final AppConfigModel appConfig;
+  final AppStateModel appState;
+
+  _ScrollView(this.appConfig, this.appState);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (appState?.item?.title != null)
-                Text(
-                  appState?.item?.title,
-                  style: TextStyle(fontSize: 40.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (appState?.item?.title != null)
+            Text(
+              appState?.item?.title,
+              style: TextStyle(fontSize: 40.0),
+            ),
+          (appState?.item?.cover != null)
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Image.network(appState.item.cover),
+                )
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                  child: Image.asset('assets/images/scrapmedia_icon.png'),
                 ),
-              (appState?.item?.cover != null)
-                  ? Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: Image.network(appState.item.cover),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                      child: Image.asset('assets/images/scrapmedia_icon.png'),
-                    ),
-              Row(
-                children: <Widget>[
-                  if (appState.visibleShareButtons)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                      child: FlatButton(
-                        child: Text('Tweet'),
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        onPressed: () => {tweet(appState.item)},
-                      ),
-                    ),
-                  if (appState.visibleShareButtons)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                      child: FlatButton(
-                        child: Text('Scrapbox'),
-                        textColor: Colors.white,
-                        color: Colors.green,
-                        onPressed: () => {
-                          openScrapbox(
-                              appState.item,
-                              appConfig.values[
-                                  ConfigKey.scrapboxProjectName.toString()])
-                        },
-                      ),
-                    ),
-                ],
-              ),
-              Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 100.0))
+          Row(
+            children: <Widget>[
+              if (appState.visibleShareButtons)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                  child: FlatButton(
+                    child: Text('Tweet'),
+                    textColor: Colors.white,
+                    color: Colors.blue,
+                    onPressed: () => {tweet(appState.item)},
+                  ),
+                ),
+              if (appState.visibleShareButtons)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                  child: FlatButton(
+                    child: Text('Scrapbox'),
+                    textColor: Colors.white,
+                    color: Colors.green,
+                    onPressed: () => {
+                      openScrapbox(
+                          appState.item,
+                          appConfig
+                              .values[ConfigKey.scrapboxProjectName.toString()])
+                    },
+                  ),
+                ),
             ],
           ),
-        ),
-      ),
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.search_ellipsis,
-        animatedIconTheme: IconThemeData(),
-        backgroundColor: Colors.green,
-        children: [
-          SpeedDialChild(
-            child: Icon(Icons.search),
-            backgroundColor: Colors.green[300],
-            label: 'ISBN検索',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () =>
-                {_navigateAndDisplaySelection(context, appConfig, appState)},
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.camera_alt),
-            backgroundColor: Colors.grey,
-            label: 'ISBNコード読取',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => scanCode(appConfig, appState),
-          ),
+          Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 100.0))
         ],
       ),
+    ));
+  }
+}
+
+class _SpeedDialSearchButton extends StatelessWidget {
+  final AppConfigModel appConfig;
+  final AppStateModel appState;
+
+  _SpeedDialSearchButton(this.appConfig, this.appState);
+
+  @override
+  Widget build(BuildContext context) {
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.search_ellipsis,
+      animatedIconTheme: IconThemeData(),
+      backgroundColor: Colors.green,
+      children: [
+        SpeedDialChild(
+          child: Icon(Icons.search),
+          backgroundColor: Colors.green[300],
+          label: 'ISBN検索',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () =>
+              {_navigateAndDisplaySelection(context, appConfig, appState)},
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.camera_alt),
+          backgroundColor: Colors.grey,
+          label: 'ISBNコード読取',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => scanCode(appConfig, appState),
+        ),
+      ],
     );
   }
 
@@ -135,5 +160,3 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
-
-enum ScrapmediaServices { openBDAPI, awsAPI }
