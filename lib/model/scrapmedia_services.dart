@@ -1,0 +1,1 @@
+enum ScrapmediaServices { openBDAPI, awsAPI }

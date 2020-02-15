@@ -1,4 +1,3 @@
-
 class ScrapMediaItem {
   String title;
   String cover;
@@ -7,12 +6,11 @@ class ScrapMediaItem {
   String asin;
   String affiliateUrl;
 
-  ScrapMediaItem({
-    this.title,
-    this.cover,
-    this.author,
-    this.publisher,
-    this.asin,
-    this.affiliateUrl
-  });
+  ScrapMediaItem(
+      {this.title,
+      this.cover,
+      this.author,
+      this.publisher,
+      this.asin,
+      this.affiliateUrl});
 }

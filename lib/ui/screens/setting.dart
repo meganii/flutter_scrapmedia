@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_scrapmedia/model/app_config.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_scrapmedia/model/appconfig.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 enum ScrapmediaServices { openBDAPI, awsAPI }
 
@@ -14,7 +14,7 @@ class SettingScreen extends StatefulWidget {
 class _SettingsPageState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
-    var appconfig = Provider.of<AppConfigModel>(context);
+    var appConfig = Provider.of<AppConfigModel>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -22,60 +22,48 @@ class _SettingsPageState extends State<SettingScreen> {
         ),
         body: Stack(
           children: <Widget>[
-            _showBody(appconfig),
+            _showBody(appConfig),
           ],
         ));
   }
 
   final _formKey = new GlobalKey<FormState>();
 
-  void _saveAll(AppConfigModel appconfig) async {
+  void _saveAll(AppConfigModel appConfig) async {
     final storage = new FlutterSecureStorage();
-    if (appconfig.values[ConfigKey.scrapboxProjectName.toString()] != null) {
+    if (appConfig.values[ConfigKey.scrapboxProjectName.toString()] != null) {
       await storage.write(
-        key: ConfigKey.scrapboxProjectName.toString(),
-        value: appconfig.values[ConfigKey.scrapboxProjectName.toString()]);
+          key: ConfigKey.scrapboxProjectName.toString(),
+          value: appConfig.values[ConfigKey.scrapboxProjectName.toString()]);
     }
-    if (appconfig.values[ConfigKey.amazonKey.toString()] != null) {
+    if (appConfig.values[ConfigKey.amazonKey.toString()] != null) {
       await storage.write(
           key: ConfigKey.amazonKey.toString(),
-          value: appconfig.values[ConfigKey.amazonKey.toString()]);
+          value: appConfig.values[ConfigKey.amazonKey.toString()]);
     }
-    if (appconfig.values[ConfigKey.amazonSecret.toString()] != null) {
+    if (appConfig.values[ConfigKey.amazonSecret.toString()] != null) {
       await storage.write(
           key: ConfigKey.amazonSecret.toString(),
-          value: appconfig.values[ConfigKey.amazonSecret.toString()]);
+          value: appConfig.values[ConfigKey.amazonSecret.toString()]);
     }
-    if (appconfig.values[ConfigKey.amazonTagName.toString()] != null) {
+    if (appConfig.values[ConfigKey.amazonTagName.toString()] != null) {
       await storage.write(
           key: ConfigKey.amazonTagName.toString(),
-          value: appconfig.values[ConfigKey.amazonTagName.toString()]);
+          value: appConfig.values[ConfigKey.amazonTagName.toString()]);
     }
-    if (appconfig.values[ConfigKey.appSearchMethod.toString()] != null) {
+    if (appConfig.values[ConfigKey.appSearchMethod.toString()] != null) {
       await storage.write(
           key: ConfigKey.appSearchMethod.toString(),
-          value: appconfig.values[ConfigKey.appSearchMethod.toString()]);
+          value: appConfig.values[ConfigKey.appSearchMethod.toString()]);
     }
-    if (appconfig.values[ConfigKey.bitlyKey.toString()] != null) {
+    if (appConfig.values[ConfigKey.bitlyKey.toString()] != null) {
       await storage.write(
           key: ConfigKey.bitlyKey.toString(),
-          value: appconfig.values[ConfigKey.bitlyKey.toString()]);
+          value: appConfig.values[ConfigKey.bitlyKey.toString()]);
     }
   }
 
-//  @override
-//  void dispose() {
-//    // Clean up the controller when the widget is disposed.
-//    appState.awsAccessKeyIdController.dispose();
-//    appState.awsAccessKeyIdController.dispose();
-//    appState.awsSecretAccessKeyController.dispose();
-//    appState.awsAssociateTagController.dispose();
-//    appState.scrapboxProjectNameController.dispose();
-//    appState.bitlyApiKeyController.dispose();
-//    super.dispose();
-//  }
-
-  Widget _showBody(AppConfigModel appconfig) {
+  Widget _showBody(AppConfigModel appConfig) {
     return Container(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -83,25 +71,26 @@ class _SettingsPageState extends State<SettingScreen> {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              _showScrapboxInput(appconfig),
-              _showRadioButton(appconfig),
-              _showEmailInput(appconfig),
-              _showPasswordInput(appconfig),
-              _showTagInput(appconfig),
-              _showBitlyInput(appconfig),
-              _showSaveButton(appconfig),
+              _showScrapboxInput(appConfig),
+              _showRadioButton(appConfig),
+              _showEmailInput(appConfig),
+              _showPasswordInput(appConfig),
+              _showTagInput(appConfig),
+              _showBitlyInput(appConfig),
+              _showSaveButton(appConfig),
             ],
           ),
         ));
   }
 
-  Widget _showScrapboxInput(AppConfigModel appconfig) {
+  Widget _showScrapboxInput(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
       child: TextFormField(
-        initialValue: appconfig.values[ConfigKey.scrapboxProjectName.toString()],
+        initialValue:
+            appConfig.values[ConfigKey.scrapboxProjectName.toString()],
         onSaved: (text) {
-          appconfig.update(ConfigKey.scrapboxProjectName.toString(), text);
+          appConfig.update(ConfigKey.scrapboxProjectName.toString(), text);
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -116,8 +105,8 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showRadioButton(AppConfigModel appconfig) {
-    var searchMethod = appconfig.values[ConfigKey.appSearchMethod.toString()];
+  Widget _showRadioButton(AppConfigModel appConfig) {
+    var searchMethod = appConfig.values[ConfigKey.appSearchMethod.toString()];
 
     return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
@@ -132,7 +121,7 @@ class _SettingsPageState extends State<SettingScreen> {
               value: ScrapmediaServices.openBDAPI.toString(),
               groupValue: searchMethod,
               onChanged: (String value) {
-                appconfig.update(
+                appConfig.update(
                     ConfigKey.appSearchMethod.toString(), value.toString());
               },
             ),
@@ -141,7 +130,7 @@ class _SettingsPageState extends State<SettingScreen> {
               value: ScrapmediaServices.awsAPI.toString(),
               groupValue: searchMethod,
               onChanged: (String value) {
-                appconfig.update(
+                appConfig.update(
                     ConfigKey.appSearchMethod.toString(), value.toString());
               },
             ),
@@ -149,13 +138,13 @@ class _SettingsPageState extends State<SettingScreen> {
         ));
   }
 
-  Widget _showEmailInput(AppConfigModel appconfig) {
+  Widget _showEmailInput(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: TextFormField(
-        initialValue: appconfig.values[ConfigKey.amazonKey.toString()],
+        initialValue: appConfig.values[ConfigKey.amazonKey.toString()],
         onSaved: (text) {
-          appconfig.update(ConfigKey.amazonKey.toString(), text);
+          appConfig.update(ConfigKey.amazonKey.toString(), text);
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -170,13 +159,13 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showPasswordInput(AppConfigModel appconfig) {
+  Widget _showPasswordInput(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
-        initialValue: appconfig.values[ConfigKey.amazonSecret.toString()],
+        initialValue: appConfig.values[ConfigKey.amazonSecret.toString()],
         onSaved: (text) {
-          appconfig.update(ConfigKey.amazonSecret.toString(), text);
+          appConfig.update(ConfigKey.amazonSecret.toString(), text);
         },
         maxLines: 1,
         obscureText: true,
@@ -192,13 +181,13 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showTagInput(AppConfigModel appconfig) {
+  Widget _showTagInput(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
-        initialValue: appconfig.values[ConfigKey.amazonTagName.toString()],
+        initialValue: appConfig.values[ConfigKey.amazonTagName.toString()],
         onSaved: (text) {
-          appconfig.update(ConfigKey.amazonTagName.toString(), text);
+          appConfig.update(ConfigKey.amazonTagName.toString(), text);
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -213,13 +202,13 @@ class _SettingsPageState extends State<SettingScreen> {
     );
   }
 
-  Widget _showBitlyInput(AppConfigModel appconfig) {
+  Widget _showBitlyInput(AppConfigModel appConfig) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: new TextFormField(
-          initialValue: appconfig.values[ConfigKey.bitlyKey.toString()],
+          initialValue: appConfig.values[ConfigKey.bitlyKey.toString()],
           onSaved: (text) {
-            appconfig.update(ConfigKey.bitlyKey.toString(), text);
+            appConfig.update(ConfigKey.bitlyKey.toString(), text);
           },
           maxLines: 1,
           obscureText: true,
@@ -235,14 +224,14 @@ class _SettingsPageState extends State<SettingScreen> {
         ));
   }
 
-  Widget _showSaveButton(AppConfigModel appconfig) {
+  Widget _showSaveButton(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: RaisedButton(
         child: Text('Submit'),
         onPressed: () {
           this._formKey.currentState.save();
-          _saveAll(appconfig);
+          _saveAll(appConfig);
         },
       ),
     );

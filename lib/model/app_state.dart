@@ -1,19 +1,21 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 
-class AppDataModel extends ChangeNotifier {
-  
+class AppStateModel extends ChangeNotifier {
   String _message;
   ScrapMediaItem _smItem;
   String _imageURL;
   bool _visibleShareButtons = false;
 
-  ScrapMediaItem get item => _smItem;
   String get message => _message;
+
+  ScrapMediaItem get item => _smItem;
+
   String get imageURL => _imageURL;
+
   bool get visibleShareButtons => _visibleShareButtons;
 
-  AppDataModel() {
+  AppStateModel() {
     _smItem = ScrapMediaItem();
   }
 

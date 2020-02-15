@@ -1,41 +1,40 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/services.dart';
 
+import 'package:apaa/apaa.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_openbd/flutter_openbd.dart';
+import 'package:flutter_scrapmedia/model/app_config.dart';
+import 'package:flutter_scrapmedia/model/app_state.dart';
 import 'package:flutter_scrapmedia/model/bitly_item.dart';
 import 'package:flutter_scrapmedia/model/config_key.dart';
-import 'package:flutter_scrapmedia/model/data.dart';
 import 'package:flutter_scrapmedia/model/scrapmedia_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:barcode_scan/barcode_scan.dart';
 
-import 'package:apaa/apaa.dart';
-import 'package:flutter_openbd/flutter_openbd.dart';
-import 'package:flutter_scrapmedia/model/appconfig.dart';
-
-Future scanCode(AppConfigModel appConfig, AppDataModel appData) async {
+Future scanCode(AppConfigModel appConfig, AppStateModel appState) async {
   try {
     String qrResult = await BarcodeScanner.scan();
     var item = await fetchItem(qrResult, appConfig);
     if (item != null) {
-      appData.updateItem(item);
-      appData.updateVisibleShareButtons(true);
+      appState.updateItem(item);
+      appState.updateVisibleShareButtons(true);
     } else {
-      appData.updateMessage('見つかりませんでした');
+      appState.updateMessage('見つかりませんでした');
     }
   } on PlatformException catch (ex) {
     if (ex.code == BarcodeScanner.CameraAccessDenied) {
-      appData.updateMessage('Camera permission was denied');
+      appState.updateMessage('Camera permission was denied');
     } else {
-      appData.updateMessage("Unknown Error $ex");
+      appState.updateMessage("Unknown Error $ex");
     }
   } on FormatException {
-    appData
+    appState
         .updateMessage('You pressed the back button before scanning anything');
   } catch (ex) {
-    appData.updateMessage("Unknown Error $ex");
+    appState.updateMessage("Unknown Error $ex");
   }
 }
 
