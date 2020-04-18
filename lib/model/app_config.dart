@@ -22,6 +22,7 @@ class AppConfigModel extends ChangeNotifier {
       _appConfig[ConfigKey.appSearchMethod.toString()] =
           ScrapmediaServices.openBDAPI.toString();
     }
+    notifyListeners();
   }
 
   void update(String key, String value) {

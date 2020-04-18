@@ -27,9 +27,9 @@ dependencies:
   url_launcher: ^5.4.1
   flutter_secure_storage: ^3.3.1+1
   share: ^0.6.3+5
-  apaa:
+  flutter_amazon_pa_api:
     git:
-      url: git@github.com:meganii/flutter-amazon-product-advertising-api.git
+      url: git@github.com:meganii/flutter_amazon_pa_api.git
       ref: master
   flutter_openbd:
     git:
