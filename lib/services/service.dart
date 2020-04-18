@@ -66,10 +66,14 @@ Future<void> tweet(ScrapMediaItem item) async {
 }
 
 Future<String> shortUrl(String apiKey, String longUrl) async {
-  String baseUrl =
-      'https://api-ssl.bitly.com/v3/shorten?access_token=$apiKey&longUrl=';
-  var encodeUrl = Uri.encodeComponent(longUrl);
-  final response = await http.get(baseUrl + encodeUrl);
+  final endpoint = 'https://api-ssl.bitly.com/v4';
+  final url = '$endpoint/shorten';
+  final headers = {
+    'content-type': 'application/json',
+    'Authorization': 'Bearer $apiKey'
+  };
+  final body = { 'long_url': longUrl };
+  final response = await http.post(url, headers: headers, body: json.encode(body));
   String shortenUrl;
   if (response.statusCode == 200) {
     var bitly = BitlyItem.fromJson(json.decode(response.body));

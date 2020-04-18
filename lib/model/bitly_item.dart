@@ -4,6 +4,6 @@ class BitlyItem {
   BitlyItem({this.url});
 
   factory BitlyItem.fromJson(Map<String, dynamic> json) {
-    return BitlyItem(url: json['data']['url']);
+    return BitlyItem(url: json['link']);
   }
 }

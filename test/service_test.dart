@@ -33,4 +33,13 @@ void main() {
     var item = fetchItem('4479302735', appConfig);
     print(item);
   });
+
+  test('shortenURL', () async {
+    final env = Platform.environment;
+    final apiKey =  env['BITLY_KEY'];
+    final shortenURL = await shortUrl(apiKey, 'https://www.meganii.com');
+    print(shortenURL);
+  });
+
+
 }
