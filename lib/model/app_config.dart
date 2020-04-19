@@ -18,7 +18,7 @@ class AppConfigModel extends ChangeNotifier {
     _appConfig.addAll(value);
 
     // Default search method
-    if (_appConfig[ConfigKey.appSearchMethod] == null) {
+    if (_appConfig[ConfigKey.appSearchMethod.toString()] == null) {
       _appConfig[ConfigKey.appSearchMethod.toString()] =
           ScrapmediaServices.openBDAPI.toString();
     }
