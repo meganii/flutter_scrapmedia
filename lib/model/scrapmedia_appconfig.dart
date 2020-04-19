@@ -3,6 +3,7 @@ class ScrapMediaAppConfig {
   String amazonSecret;
   String amazonTagName;
   String appSearchMethod;
+  String bitlyKey;
 
   ScrapMediaAppConfig();
 }

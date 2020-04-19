@@ -81,10 +81,10 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: ca506604bc61d96982f40cf68015dfc0cf819866
+      resolved-ref: "5f253b794a694e2399c22998b49f5ce54aa51c44"
       url: "git@github.com:meganii/flutter_amazon_pa_api.git"
     source: git
-    version: "0.0.4"
+    version: "0.0.5"
   flutter_launcher_icons:
     dependency: "direct main"
     description:

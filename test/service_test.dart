@@ -42,4 +42,9 @@ void main() {
   });
 
 
+  test('convert to ASIN', () {
+    final asin = convertToASIN('9784065151563');
+    expect('4065151562', asin);
+  });
+
 }

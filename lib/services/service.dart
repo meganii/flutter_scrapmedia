@@ -52,6 +52,7 @@ ScrapMediaAppConfig createScrapMediaAppConfigFrom(
       appConfigModel.values[ConfigKey.amazonTagName.toString()];
   appConfig.appSearchMethod =
       appConfigModel.values[ConfigKey.appSearchMethod.toString()];
+  appConfig.bitlyKey = appConfigModel.values[ConfigKey.bitlyKey.toString()];
   return appConfig;
 }
 
@@ -72,10 +73,11 @@ Future<String> shortUrl(String apiKey, String longUrl) async {
     'content-type': 'application/json',
     'Authorization': 'Bearer $apiKey'
   };
-  final body = { 'long_url': longUrl };
-  final response = await http.post(url, headers: headers, body: json.encode(body));
+  final body = {'long_url': longUrl};
+  final response =
+      await http.post(url, headers: headers, body: json.encode(body));
   String shortenUrl;
-  if (response.statusCode == 200) {
+  if (response.statusCode == 200 || response.statusCode == 201) {
     var bitly = BitlyItem.fromJson(json.decode(response.body));
     shortenUrl = bitly.url;
   } else {
@@ -106,6 +108,28 @@ String _createBody(ScrapMediaItem item) {
   return body;
 }
 
+String convertToASIN(String isbn) {
+  var digit = 11 -
+      (int.parse(isbn[3]) * 10 +
+              int.parse(isbn[4]) * 9 +
+              int.parse(isbn[5]) * 8 +
+              int.parse(isbn[6]) * 7 +
+              int.parse(isbn[7]) * 6 +
+              int.parse(isbn[8]) * 5 +
+              int.parse(isbn[9]) * 4 +
+              int.parse(isbn[10]) * 3 +
+              int.parse(isbn[11]) * 2) %
+          11;
+  var digitStr = '';
+  if (digit == 10) {
+    digitStr = 'X';
+  } else {
+    digitStr = digit.toString();
+  }
+  var asin = isbn.substring(3, 12) + digitStr;
+  return asin;
+}
+
 Future<ScrapMediaItem> fetchItem(
     String isbn, ScrapMediaAppConfig appConfig) async {
   final service = _createService(appConfig);
@@ -116,7 +140,7 @@ AbstractRequestService _createService(ScrapMediaAppConfig appConfig) {
   final serviceName = appConfig.appSearchMethod;
   if (serviceName == 'ScrapmediaServices.awsAPI') {
     return new AmazonPARequestService(appConfig.amazonAPIKey,
-        appConfig.amazonSecret, appConfig.amazonTagName);
+        appConfig.amazonSecret, appConfig.amazonTagName, appConfig.bitlyKey);
   } else {
     return new OpenBDRequestService();
   }
