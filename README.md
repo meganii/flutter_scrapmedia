@@ -1,5 +1,7 @@
 # flutter_scrapmedia
 
+![ScrapMedia](https://res.cloudinary.com/meganii/image/upload/v1573366346/Scrapmedia_hero_r2wjh0.png "ScrapMedia")
+
 A new Flutter application.
 
 ## Getting Started
