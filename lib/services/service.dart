@@ -121,8 +121,8 @@ String convertToASIN(String isbn) {
               int.parse(isbn[11]) * 2) %
           11;
   var digitStr = '';
-  if (digit == 10) {
-    digitStr = 'X';
+  if (digit >= 10) {
+    digitStr = '0';
   } else {
     digitStr = digit.toString();
   }
