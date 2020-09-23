@@ -21,7 +21,7 @@ Future scanCode(AppConfigModel appConfig, AppStateModel appState) async {
     var qrResult = await BarcodeScanner.scan();
     final scrapMediaAppConfig = createScrapMediaAppConfigFrom(appConfig);
     var item = await fetchItem(qrResult.rawContent, scrapMediaAppConfig);
-    if (item != null) {
+    if (item.title != null) {
       appState.updateItem(item);
       appState.updateVisibleShareButtons(true);
     } else {
