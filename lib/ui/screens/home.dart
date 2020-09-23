@@ -129,7 +129,7 @@ class _SpeedDialSearchButton extends StatelessWidget {
         SpeedDialChild(
           child: Icon(Icons.search),
           backgroundColor: Colors.green[300],
-          label: 'ISBN検索',
+          label: 'Search ISBN',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () =>
               {_navigateAndDisplaySelection(context, appConfig, appState)},
@@ -137,7 +137,7 @@ class _SpeedDialSearchButton extends StatelessWidget {
         SpeedDialChild(
           child: Icon(Icons.camera_alt),
           backgroundColor: Colors.grey,
-          label: 'ISBNコード読取',
+          label: 'Scan ISBN Code',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => scanCode(appConfig, appState),
         ),
