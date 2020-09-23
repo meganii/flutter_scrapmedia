@@ -15,7 +15,7 @@ void main() {
       ..partnerTag = awsAssociateTag;
 
     final response = await paapi.getItems(['4479302735']);
-    print(response.itemsResult);
+    // print(response.itemsResult);
     final item = response.itemsResult.items[0];
     expect(item.asin, '4479302735');
     expect(item.detailPageURL,
@@ -29,16 +29,19 @@ void main() {
     appConfig.amazonAPIKey = env['AWS_ACCESS_KEY_ID'];
     appConfig.amazonSecret = env['AWS_SECRET_ACCESS_KEY'];
     appConfig.amazonTagName = env['AWS_ASSOCIATE_TAG'];
+    appConfig.bitlyKey = env['BITLY_KEY'];
     appConfig.appSearchMethod = "ScrapmediaServices.awsAPI";
-    var item = fetchItem('4479302735', appConfig);
-    print(item);
+    var item = await fetchItem('9784479302735', appConfig);
+    expect(item.asin, '4479302735');
+    expect(item.affiliateUrl, 'https://amzn.to/3mHMUqH');
+    expect(item.title, '「1日30分」を続けなさい! (だいわ文庫)');
   });
 
   test('shortenURL', () async {
     final env = Platform.environment;
     final apiKey = env['BITLY_KEY'];
     final shortenURL = await shortUrl(apiKey, 'https://www.meganii.com');
-    print(shortenURL);
+    expect(shortenURL, 'https://bit.ly/3aiuvJB');
   });
 
   test('convert to ASIN', () {
@@ -49,5 +52,10 @@ void main() {
   test('convert to ASIN 4478111030', () {
     final asin = convertToASIN('9784478111031');
     expect(asin, '4478111030');
+  });
+
+  test('convert to ASIN 9784910063041', () {
+    final asin = convertToASIN('9784910063041');
+    expect(asin, '4910063048');
   });
 }

@@ -18,9 +18,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future scanCode(AppConfigModel appConfig, AppStateModel appState) async {
   try {
-    String qrResult = await BarcodeScanner.scan();
+    var qrResult = await BarcodeScanner.scan();
     final scrapMediaAppConfig = createScrapMediaAppConfigFrom(appConfig);
-    var item = await fetchItem(qrResult, scrapMediaAppConfig);
+    var item = await fetchItem(qrResult.rawContent, scrapMediaAppConfig);
     if (item != null) {
       appState.updateItem(item);
       appState.updateVisibleShareButtons(true);
@@ -28,7 +28,7 @@ Future scanCode(AppConfigModel appConfig, AppStateModel appState) async {
       appState.updateMessage('見つかりませんでした');
     }
   } on PlatformException catch (ex) {
-    if (ex.code == BarcodeScanner.CameraAccessDenied) {
+    if (ex.code == BarcodeScanner.cameraAccessDenied) {
       appState.updateMessage('Camera permission was denied');
     } else {
       appState.updateMessage("Unknown Error $ex");
