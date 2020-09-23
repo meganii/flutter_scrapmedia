@@ -27,11 +27,15 @@ class SearchScreen extends StatelessWidget {
         onChanged: (text) {
           _isbn = text;
         },
+        onSubmitted: (_) {
+          Navigator.pop(context, _isbn);
+        },
+        textInputAction: TextInputAction.search,
         maxLines: 1,
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.number,
         autofocus: true,
         decoration: InputDecoration(
-          hintText: 'Input search word',
+          hintText: 'Type ISBN(13)',
           suffixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
             child: IconButton(
