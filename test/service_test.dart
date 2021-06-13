@@ -58,4 +58,9 @@ void main() {
     final asin = convertToASIN('9784910063041');
     expect(asin, '4910063048');
   });
+
+  test('convert to ASIN 9784910063041', () {
+    final asin = convertToASIN('9784798158167');
+    expect(asin, '479815816X');
+  });
 }
