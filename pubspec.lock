@@ -118,10 +118,10 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "589cede0a3dcef057a67dd357862e338c1ac40c5"
+      resolved-ref: d91ca6dad8372ae8fb47b3e04733538f11188b2c
       url: "git@github.com:meganii/flutter_openbd.git"
     source: git
-    version: "0.0.5"
+    version: "0.0.6"
   flutter_secure_storage:
     dependency: "direct main"
     description:
