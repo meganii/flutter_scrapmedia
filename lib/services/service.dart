@@ -68,7 +68,7 @@ Future<void> tweet(ScrapMediaItem item) async {
 
 Future<String> shortUrl(String apiKey, String longUrl) async {
   final endpoint = 'https://api-ssl.bitly.com/v4';
-  final url = '$endpoint/shorten';
+  final url = Uri.parse('$endpoint/shorten');
   final headers = {
     'content-type': 'application/json',
     'Authorization': 'Bearer $apiKey'
