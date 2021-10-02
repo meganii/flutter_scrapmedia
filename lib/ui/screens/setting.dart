@@ -227,8 +227,9 @@ class _SettingsPageState extends State<SettingScreen> {
   Widget _showSaveButton(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: RaisedButton(
+      child: ElevatedButton(
         child: Text('Submit'),
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
         onPressed: () {
           this._formKey.currentState.save();
           _saveAll(appConfig);

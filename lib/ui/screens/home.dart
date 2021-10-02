@@ -82,20 +82,24 @@ class _ScrollView extends StatelessWidget {
               if (appState.visibleShareButtons)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                  child: FlatButton(
+                  child: TextButton(
                     child: Text('Tweet'),
-                    textColor: Colors.white,
-                    color: Colors.blue,
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue)
+                    ),
                     onPressed: () => {tweet(appState.item)},
                   ),
                 ),
               if (appState.visibleShareButtons)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                  child: FlatButton(
+                  child: TextButton(
                     child: Text('Scrapbox'),
-                    textColor: Colors.white,
-                    color: Colors.green,
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green)
+                    ),
                     onPressed: () => {
                       openScrapbox(
                           appState.item,
@@ -129,7 +133,7 @@ class _SpeedDialSearchButton extends StatelessWidget {
         SpeedDialChild(
           child: Icon(Icons.search),
           backgroundColor: Colors.green[300],
-          label: 'Search ISBN',
+          label: 'Search from ISBN',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () =>
               {_navigateAndDisplaySelection(context, appConfig, appState)},
