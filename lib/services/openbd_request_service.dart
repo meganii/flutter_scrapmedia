@@ -8,7 +8,7 @@ class OpenBDRequestService extends AbstractRequestService {
     final api = FlutterOpenBD();
     final result = await api.getISBN(isbn);
     
-    if (result == null) {
+    if (result.title.isEmpty) {
       return new ScrapMediaItem();
     }
 

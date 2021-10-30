@@ -128,7 +128,6 @@ class _SpeedDialSearchButton extends StatelessWidget {
     return SpeedDial(
       animatedIcon: AnimatedIcons.search_ellipsis,
       animatedIconTheme: IconThemeData(),
-      backgroundColor: Colors.green,
       children: [
         SpeedDialChild(
           child: Icon(Icons.search),
@@ -158,7 +157,7 @@ class _SpeedDialSearchButton extends StatelessWidget {
 
     final scrapMediaAppConfig = createScrapMediaAppConfigFrom(appConfig);
     var item = await fetchItem(isbn, scrapMediaAppConfig);
-    if (item.title != null) {
+    if (item.title.isNotEmpty) {
       appData.updateItem(item);
       appData.updateVisibleShareButtons(true);
     } else {
