@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_scrapmedia/model/app_config.dart';
 import 'package:flutter_scrapmedia/model/app_state.dart';
