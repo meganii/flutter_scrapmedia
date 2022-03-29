@@ -1,5 +1,5 @@
 class BitlyItem {
-  String url;
+  String? url;
 
   BitlyItem({this.url});
 

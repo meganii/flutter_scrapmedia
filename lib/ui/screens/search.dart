@@ -19,7 +19,7 @@ class SearchScreen extends StatelessWidget {
   }
 
   Widget _showText(BuildContext context) {
-    String _isbn;
+    String _isbn = '';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(5.0, 100.0, 5.0, 0.0),

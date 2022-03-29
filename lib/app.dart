@@ -8,7 +8,7 @@ class ScrapmediaApp extends StatelessWidget {
     return MaterialApp(
       title: 'Scrap Media',
       theme: ThemeData(
-        primaryColor: Colors.green,
+        primarySwatch: Colors.green,
       ),
       debugShowCheckedModeBanner: false,
       routes: {

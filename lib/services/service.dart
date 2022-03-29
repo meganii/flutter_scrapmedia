@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_scrapmedia/model/app_config.dart';
 import 'package:flutter_scrapmedia/model/app_state.dart';
@@ -66,7 +66,7 @@ Future<void> tweet(ScrapMediaItem item) async {
   Share.share(content);
 }
 
-Future<String> shortUrl(String apiKey, String longUrl) async {
+Future<String?> shortUrl(String apiKey, String longUrl) async {
   final endpoint = 'https://api-ssl.bitly.com/v4';
   final url = Uri.parse('$endpoint/shorten');
   final headers = {
@@ -76,7 +76,7 @@ Future<String> shortUrl(String apiKey, String longUrl) async {
   final body = {'long_url': longUrl};
   final response =
       await http.post(url, headers: headers, body: json.encode(body));
-  String shortenUrl;
+  String? shortenUrl;
   if (response.statusCode == 200 || response.statusCode == 201) {
     var bitly = BitlyItem.fromJson(json.decode(response.body));
     shortenUrl = bitly.url;
@@ -91,7 +91,7 @@ Future<void> openScrapbox(ScrapMediaItem item, String projectName) async {
   print(projectName);
   String sbUrl = 'https://scrapbox.io/$projectName/';
   await launch(sbUrl +
-      Uri.encodeComponent(item.title) +
+      Uri.encodeComponent(item.title ?? 'title') +
       '?body=' +
       Uri.encodeComponent(_createBody(item)));
 }
@@ -141,8 +141,11 @@ Future<ScrapMediaItem> fetchItem(
 AbstractRequestService _createService(ScrapMediaAppConfig appConfig) {
   final serviceName = appConfig.appSearchMethod;
   if (serviceName == 'ScrapmediaServices.awsAPI') {
-    return new AmazonPARequestService(appConfig.amazonAPIKey,
-        appConfig.amazonSecret, appConfig.amazonTagName, appConfig.bitlyKey);
+    return new AmazonPARequestService(
+        amazonAPIKey: appConfig.amazonAPIKey ?? '',
+        amazonSecret: appConfig.amazonSecret ?? '',
+        amazonTagName: appConfig.amazonTagName ?? '',
+        bitlyKey: appConfig.bitlyKey ?? '');
   } else {
     return new OpenBDRequestService();
   }
