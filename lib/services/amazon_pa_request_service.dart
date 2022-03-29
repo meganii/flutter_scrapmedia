@@ -10,31 +10,35 @@ class AmazonPARequestService extends AbstractRequestService {
   String bitlyKey;
 
   AmazonPARequestService(
-      this.amazonAPIKey, this.amazonSecret, this.amazonTagName, this.bitlyKey);
+      {required this.amazonAPIKey,
+      required this.amazonSecret,
+      required this.amazonTagName,
+      required this.bitlyKey});
 
   @override
   Future<ScrapMediaItem> fetchItem(String isbn) async {
     final asin = convertToASIN(isbn);
 
-    final api = PaAPI(amazonAPIKey, amazonSecret)..partnerTag = amazonTagName;
+    final api = PaAPI(accessKey: amazonAPIKey, secretKey: amazonSecret)
+      ..partnerTag = amazonTagName;
     final response = await api.getItems([asin]).catchError((e) => print(e));
 
     if (response.itemsResult?.items?.length == 0) {
       return ScrapMediaItem();
     }
 
-    final item = response.itemsResult.items[0];
+    final item = response.itemsResult?.items?[0];
     if (item == null) {
       return ScrapMediaItem();
     }
 
-    final affiliateUrl = await shortUrl(bitlyKey, item.detailPageURL);
+    final affiliateUrl = await shortUrl(bitlyKey, item.detailPageURL ?? '');
 
     return ScrapMediaItem(
-        title: item.itemInfo.title.displayValue,
-        cover: item.images.primary.large.url,
-        author: item.itemInfo.byLineInfo.contributors[0].name,
-        publisher: item.itemInfo.byLineInfo.manufacturer.displayValue,
+        title: item.itemInfo?.title?.displayValue,
+        cover: item.images?.primary?.large?.url,
+        author: item.itemInfo?.byLineInfo?.contributors?[0].name,
+        publisher: item.itemInfo?.byLineInfo?.manufacturer?.displayValue,
         asin: item.asin,
         affiliateUrl: affiliateUrl);
   }

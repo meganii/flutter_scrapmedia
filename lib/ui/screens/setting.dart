@@ -90,7 +90,7 @@ class _SettingsPageState extends State<SettingScreen> {
         initialValue:
             appConfig.values[ConfigKey.scrapboxProjectName.toString()],
         onSaved: (text) {
-          appConfig.update(ConfigKey.scrapboxProjectName.toString(), text);
+          appConfig.update(ConfigKey.scrapboxProjectName.toString(), text!);
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -120,7 +120,7 @@ class _SettingsPageState extends State<SettingScreen> {
               title: const Text('openBD API'),
               value: ScrapmediaServices.openBDAPI.toString(),
               groupValue: searchMethod,
-              onChanged: (String value) {
+              onChanged: (String? value) {
                 appConfig.update(
                     ConfigKey.appSearchMethod.toString(), value.toString());
               },
@@ -129,7 +129,7 @@ class _SettingsPageState extends State<SettingScreen> {
               title: const Text('Amazon Product Advertising API'),
               value: ScrapmediaServices.awsAPI.toString(),
               groupValue: searchMethod,
-              onChanged: (String value) {
+              onChanged: (String? value) {
                 appConfig.update(
                     ConfigKey.appSearchMethod.toString(), value.toString());
               },
@@ -144,7 +144,7 @@ class _SettingsPageState extends State<SettingScreen> {
       child: TextFormField(
         initialValue: appConfig.values[ConfigKey.amazonKey.toString()],
         onSaved: (text) {
-          appConfig.update(ConfigKey.amazonKey.toString(), text);
+          appConfig.update(ConfigKey.amazonKey.toString(), text!);
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -165,7 +165,7 @@ class _SettingsPageState extends State<SettingScreen> {
       child: new TextFormField(
         initialValue: appConfig.values[ConfigKey.amazonSecret.toString()],
         onSaved: (text) {
-          appConfig.update(ConfigKey.amazonSecret.toString(), text);
+          appConfig.update(ConfigKey.amazonSecret.toString(), text!);
         },
         maxLines: 1,
         obscureText: true,
@@ -176,7 +176,7 @@ class _SettingsPageState extends State<SettingScreen> {
               Icons.lock,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+        validator: (value) => value == null ? 'Password can\'t be empty' : null,
       ),
     );
   }
@@ -187,7 +187,7 @@ class _SettingsPageState extends State<SettingScreen> {
       child: new TextFormField(
         initialValue: appConfig.values[ConfigKey.amazonTagName.toString()],
         onSaved: (text) {
-          appConfig.update(ConfigKey.amazonTagName.toString(), text);
+          appConfig.update(ConfigKey.amazonTagName.toString(), text!);
         },
         maxLines: 1,
         keyboardType: TextInputType.text,
@@ -208,7 +208,7 @@ class _SettingsPageState extends State<SettingScreen> {
         child: new TextFormField(
           initialValue: appConfig.values[ConfigKey.bitlyKey.toString()],
           onSaved: (text) {
-            appConfig.update(ConfigKey.bitlyKey.toString(), text);
+            appConfig.update(ConfigKey.bitlyKey.toString(), text!);
           },
           maxLines: 1,
           obscureText: true,
@@ -220,17 +220,18 @@ class _SettingsPageState extends State<SettingScreen> {
                 color: Colors.grey,
               )),
           validator: (value) =>
-              value.isEmpty ? 'Password can\'t be empty' : null,
+              value == null ? 'Password can\'t be empty' : null,
         ));
   }
 
   Widget _showSaveButton(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: RaisedButton(
+      child: ElevatedButton(
         child: Text('Submit'),
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
         onPressed: () {
-          this._formKey.currentState.save();
+          this._formKey.currentState?.save();
           _saveAll(appConfig);
         },
       ),

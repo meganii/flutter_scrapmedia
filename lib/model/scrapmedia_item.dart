@@ -1,10 +1,10 @@
 class ScrapMediaItem {
-  String title;
-  String cover;
-  String author;
-  String publisher;
-  String asin;
-  String affiliateUrl;
+  String? title;
+  String? cover;
+  String? author;
+  String? publisher;
+  String? asin;
+  String? affiliateUrl;
 
   ScrapMediaItem(
       {this.title,
