@@ -21,13 +21,14 @@ class AmazonPARequestService extends AbstractRequestService {
 
     final api = PaAPI(accessKey: amazonAPIKey, secretKey: amazonSecret)
       ..partnerTag = amazonTagName;
-    final response = await api.getItems([asin]).catchError((e) => print(e));
+    final response = await api.getItems([asin]);
 
-    if (response.itemsResult?.items?.length == 0) {
+    final items = response.itemsResult!.items;
+    if (items != null && items.isEmpty) {
       return ScrapMediaItem();
     }
 
-    final item = response.itemsResult?.items?[0];
+    final item = items?[0];
     if (item == null) {
       return ScrapMediaItem();
     }

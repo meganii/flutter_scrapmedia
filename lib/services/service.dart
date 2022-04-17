@@ -57,7 +57,7 @@ ScrapMediaAppConfig createScrapMediaAppConfigFrom(
 }
 
 Future<void> tweet(ScrapMediaItem item) async {
-  var content;
+  String content;
   if (item.affiliateUrl != null) {
     content = '${item.title} ${item.affiliateUrl}';
   } else {
@@ -67,7 +67,7 @@ Future<void> tweet(ScrapMediaItem item) async {
 }
 
 Future<String?> shortUrl(String apiKey, String longUrl) async {
-  final endpoint = 'https://api-ssl.bitly.com/v4';
+  const endpoint = 'https://api-ssl.bitly.com/v4';
   final url = Uri.parse('$endpoint/shorten');
   final headers = {
     'content-type': 'application/json',
@@ -88,7 +88,6 @@ Future<String?> shortUrl(String apiKey, String longUrl) async {
 }
 
 Future<void> openScrapbox(ScrapMediaItem item, String projectName) async {
-  print(projectName);
   String sbUrl = 'https://scrapbox.io/$projectName/';
   await launch(sbUrl +
       Uri.encodeComponent(item.title ?? 'title') +
@@ -97,9 +96,9 @@ Future<void> openScrapbox(ScrapMediaItem item, String projectName) async {
 }
 
 String _createBody(ScrapMediaItem item) {
-  String body = '[${item.cover}]\n\n' +
-      '=====\n' +
-      '著者: ${item.author} \n' +
+  String body = '[${item.cover}]\n\n'
+      '=====\n'
+      '著者: ${item.author} \n'
       '出版社: ${item.publisher}\n';
   if (item.asin != null) {
     body += 'ASIN: ${item.asin}\n';
@@ -141,12 +140,12 @@ Future<ScrapMediaItem> fetchItem(
 AbstractRequestService _createService(ScrapMediaAppConfig appConfig) {
   final serviceName = appConfig.appSearchMethod;
   if (serviceName == 'ScrapmediaServices.awsAPI') {
-    return new AmazonPARequestService(
+    return AmazonPARequestService(
         amazonAPIKey: appConfig.amazonAPIKey ?? '',
         amazonSecret: appConfig.amazonSecret ?? '',
         amazonTagName: appConfig.amazonTagName ?? '',
         bitlyKey: appConfig.bitlyKey ?? '');
   } else {
-    return new OpenBDRequestService();
+    return OpenBDRequestService();
   }
 }
