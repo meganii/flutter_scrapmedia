@@ -10,12 +10,14 @@ import 'package:provider/provider.dart';
 enum ScrapmediaServices { openBDAPI, awsAPI }
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => new _HomeScreenState();
+  State<StatefulWidget> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       AppStateModel appState, GlobalKey<ScaffoldState> scaffoldKey) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(title: Text("Scrap Media"), actions: <Widget>[
+      appBar: AppBar(title: const Text("Scrap Media"), actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.settings_applications),
           tooltip: 'Settings',
@@ -54,7 +56,7 @@ class _ScrollView extends StatelessWidget {
   final AppConfigModel appConfig;
   final AppStateModel appState;
 
-  _ScrollView(this.appConfig, this.appState);
+  const _ScrollView(this.appConfig, this.appState);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class _ScrollView extends StatelessWidget {
           if (appState.item?.title != null)
             Text(
               appState.item?.title ?? '',
-              style: TextStyle(fontSize: 40.0),
+              style: const TextStyle(fontSize: 40.0),
             ),
           (appState.item?.cover != null)
               ? Padding(
@@ -83,11 +85,12 @@ class _ScrollView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                   child: TextButton(
-                    child: Text('Tweet'),
+                    child: const Text('Tweet'),
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue)
-                    ),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue)),
                     onPressed: () => {tweet(appState.item!)},
                   ),
                 ),
@@ -95,22 +98,23 @@ class _ScrollView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                   child: TextButton(
-                    child: Text('Scrapbox'),
+                    child: const Text('Scrapbox'),
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green)
-                    ),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green)),
                     onPressed: () => {
                       openScrapbox(
                           appState.item!,
-                          appConfig
-                              .values[ConfigKey.scrapboxProjectName.toString()]!)
+                          appConfig.values[
+                              ConfigKey.scrapboxProjectName.toString()]!)
                     },
                   ),
                 ),
             ],
           ),
-          Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 100.0))
+          const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 100.0))
         ],
       ),
     ));
@@ -121,27 +125,27 @@ class _SpeedDialSearchButton extends StatelessWidget {
   final AppConfigModel appConfig;
   final AppStateModel appState;
 
-  _SpeedDialSearchButton(this.appConfig, this.appState);
+  const _SpeedDialSearchButton(this.appConfig, this.appState);
 
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
       animatedIcon: AnimatedIcons.search_ellipsis,
-      animatedIconTheme: IconThemeData(),
+      animatedIconTheme: const IconThemeData(),
       children: [
         SpeedDialChild(
-          child: Icon(Icons.search),
+          child: const Icon(Icons.search),
           backgroundColor: Colors.green[300],
           label: 'Search from ISBN',
-          labelStyle: TextStyle(fontSize: 18.0),
+          labelStyle: const TextStyle(fontSize: 18.0),
           onTap: () =>
               {_navigateAndDisplaySelection(context, appConfig, appState)},
         ),
         SpeedDialChild(
-          child: Icon(Icons.camera_alt),
+          child: const Icon(Icons.camera_alt),
           backgroundColor: Colors.grey,
           label: 'Scan ISBN Code',
-          labelStyle: TextStyle(fontSize: 18.0),
+          labelStyle: const TextStyle(fontSize: 18.0),
           onTap: () => scanCode(appConfig, appState),
         ),
       ],
@@ -152,7 +156,7 @@ class _SpeedDialSearchButton extends StatelessWidget {
       AppStateModel appData) async {
     final isbn = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SearchScreen()),
+      MaterialPageRoute(builder: (context) => const SearchScreen()),
     );
 
     final scrapMediaAppConfig = createScrapMediaAppConfigFrom(appConfig);

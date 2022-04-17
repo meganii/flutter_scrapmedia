@@ -11,7 +11,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => AppConfigModel()),
         ChangeNotifierProvider(create: (context) => AppStateModel()),
       ],
-      child: ScrapmediaApp(),
+      child: const ScrapmediaApp(),
     ),
   );
 }

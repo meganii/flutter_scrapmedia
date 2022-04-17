@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 enum ScrapmediaServices { openBDAPI, awsAPI }
 
 class SettingScreen extends StatefulWidget {
+  const SettingScreen({Key? key}) : super(key: key);
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -18,7 +20,7 @@ class _SettingsPageState extends State<SettingScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Settings"),
+          title: const Text("Settings"),
         ),
         body: Stack(
           children: <Widget>[
@@ -27,10 +29,10 @@ class _SettingsPageState extends State<SettingScreen> {
         ));
   }
 
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   void _saveAll(AppConfigModel appConfig) async {
-    final storage = new FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     if (appConfig.values[ConfigKey.scrapboxProjectName.toString()] != null) {
       await storage.write(
           key: ConfigKey.scrapboxProjectName.toString(),
@@ -65,9 +67,9 @@ class _SettingsPageState extends State<SettingScreen> {
 
   Widget _showBody(AppConfigModel appConfig) {
     return Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: this._formKey,
+          key: _formKey,
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -95,7 +97,7 @@ class _SettingsPageState extends State<SettingScreen> {
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             hintText: 'Scrapbox Project name',
             icon: Icon(
               Icons.vpn_key,
@@ -112,7 +114,7 @@ class _SettingsPageState extends State<SettingScreen> {
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
         child: Column(
           children: <Widget>[
-            Text(
+            const Text(
               'Which API do you use',
               textAlign: TextAlign.left,
             ),
@@ -149,7 +151,7 @@ class _SettingsPageState extends State<SettingScreen> {
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             hintText: 'AWS ID',
             icon: Icon(
               Icons.vpn_key,
@@ -162,7 +164,7 @@ class _SettingsPageState extends State<SettingScreen> {
   Widget _showPasswordInput(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
+      child: TextFormField(
         initialValue: appConfig.values[ConfigKey.amazonSecret.toString()],
         onSaved: (text) {
           appConfig.update(ConfigKey.amazonSecret.toString(), text!);
@@ -170,9 +172,9 @@ class _SettingsPageState extends State<SettingScreen> {
         maxLines: 1,
         obscureText: true,
         autofocus: false,
-        decoration: new InputDecoration(
+        decoration: const InputDecoration(
             hintText: 'AWS Secret KEY',
-            icon: new Icon(
+            icon: Icon(
               Icons.lock,
               color: Colors.grey,
             )),
@@ -184,7 +186,7 @@ class _SettingsPageState extends State<SettingScreen> {
   Widget _showTagInput(AppConfigModel appConfig) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
+      child: TextFormField(
         initialValue: appConfig.values[ConfigKey.amazonTagName.toString()],
         onSaved: (text) {
           appConfig.update(ConfigKey.amazonTagName.toString(), text!);
@@ -192,9 +194,9 @@ class _SettingsPageState extends State<SettingScreen> {
         maxLines: 1,
         keyboardType: TextInputType.text,
         autofocus: false,
-        decoration: new InputDecoration(
+        decoration: const InputDecoration(
             hintText: 'Tag ID',
-            icon: new Icon(
+            icon: Icon(
               Icons.perm_identity,
               color: Colors.grey,
             )),
@@ -205,7 +207,7 @@ class _SettingsPageState extends State<SettingScreen> {
   Widget _showBitlyInput(AppConfigModel appConfig) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-        child: new TextFormField(
+        child: TextFormField(
           initialValue: appConfig.values[ConfigKey.bitlyKey.toString()],
           onSaved: (text) {
             appConfig.update(ConfigKey.bitlyKey.toString(), text!);
@@ -213,9 +215,9 @@ class _SettingsPageState extends State<SettingScreen> {
           maxLines: 1,
           obscureText: true,
           autofocus: false,
-          decoration: new InputDecoration(
+          decoration: const InputDecoration(
               hintText: 'Bitly API KEY',
-              icon: new Icon(
+              icon: Icon(
                 Icons.lock,
                 color: Colors.grey,
               )),
@@ -228,10 +230,11 @@ class _SettingsPageState extends State<SettingScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: ElevatedButton(
-        child: Text('Submit'),
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
+        child: const Text('Submit'),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
         onPressed: () {
-          this._formKey.currentState?.save();
+          _formKey.currentState?.save();
           _saveAll(appConfig);
         },
       ),

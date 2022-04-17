@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatelessWidget {
+  const SearchScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Search'),
+          title: const Text('Search'),
         ),
         body: Container(
-          padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -39,7 +41,7 @@ class SearchScreen extends StatelessWidget {
           suffixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
             child: IconButton(
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
                 onPressed: () => {Navigator.pop(context, _isbn)}),
           ),
         ),

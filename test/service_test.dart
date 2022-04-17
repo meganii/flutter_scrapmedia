@@ -24,7 +24,7 @@ void main() async {
   });
 
   test('fetchItem', () async {
-    var appConfig = new ScrapMediaAppConfig();
+    var appConfig = ScrapMediaAppConfig();
     appConfig.amazonAPIKey = Platform.environment['AWS_ACCESS_KEY_ID'];
     appConfig.amazonSecret = Platform.environment['AWS_SECRET_ACCESS_KEY'];
     appConfig.amazonTagName = Platform.environment['AWS_ASSOCIATE_TAG'];
