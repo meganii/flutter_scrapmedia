@@ -159,6 +159,10 @@ class _SpeedDialSearchButton extends StatelessWidget {
       MaterialPageRoute(builder: (context) => const SearchScreen()),
     );
 
+    if (isbn == null) {
+      return;
+    }
+
     final scrapMediaAppConfig = createScrapMediaAppConfigFrom(appConfig);
     var item = await fetchItem(isbn, scrapMediaAppConfig);
     if (item.title != null) {
