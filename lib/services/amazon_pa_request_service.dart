@@ -33,7 +33,7 @@ class AmazonPARequestService extends AbstractRequestService {
       return ScrapMediaItem();
     }
 
-    final affiliateUrl = await shortUrl(bitlyKey, item.detailPageURL ?? '');
+    final affiliateUrl = await _getAffiliateUrl(bitlyKey, item.detailPageURL!);
 
     return ScrapMediaItem(
         title: item.itemInfo?.title?.displayValue,
@@ -42,5 +42,14 @@ class AmazonPARequestService extends AbstractRequestService {
         publisher: item.itemInfo?.byLineInfo?.manufacturer?.displayValue,
         asin: item.asin,
         affiliateUrl: affiliateUrl);
+  }
+
+  Future<String> _getAffiliateUrl(String bitlyKey, String detailPageURL) async {
+    if (bitlyKey.isNotEmpty) {
+      var url = await shortUrl(bitlyKey, detailPageURL);
+      return url ?? '';
+    } else {
+      return detailPageURL;
+    }
   }
 }
