@@ -70,10 +70,10 @@ class _ScrollView extends StatelessWidget {
               appState.item?.title ?? '',
               style: const TextStyle(fontSize: 40.0),
             ),
-          (appState.item?.cover != null)
+          (appState.item?.cover != null && appState.item!.cover!.isNotEmpty)
               ? Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  child: Image.network(appState.item?.cover ?? ''),
+                  child: Image.network(appState.item!.cover!),
                 )
               : Padding(
                   padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
@@ -108,7 +108,9 @@ class _ScrollView extends StatelessWidget {
                       openScrapbox(
                           appState.item!,
                           appConfig.values[
-                              ConfigKey.scrapboxProjectName.toString()]!)
+                              ConfigKey.scrapboxProjectName.toString()]!,
+                          appConfig
+                              .values[ConfigKey.userSettingBody.toString()]!),
                     },
                   ),
                 ),
@@ -158,6 +160,10 @@ class _SpeedDialSearchButton extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (context) => const SearchScreen()),
     );
+
+    if (isbn == null) {
+      return;
+    }
 
     final scrapMediaAppConfig = createScrapMediaAppConfigFrom(appConfig);
     var item = await fetchItem(isbn, scrapMediaAppConfig);

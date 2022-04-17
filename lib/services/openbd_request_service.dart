@@ -13,10 +13,10 @@ class OpenBDRequestService extends AbstractRequestService {
     }
 
     return ScrapMediaItem(
-      title: result.title,
-      cover: result.cover,
-      author: result.author,
-      publisher: result.publisher,
-    );
+        title: result.title,
+        cover: result.cover,
+        author: result.author,
+        publisher: result.publisher,
+        isbn: isbn);
   }
 }
