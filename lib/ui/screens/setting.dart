@@ -63,6 +63,11 @@ class _SettingsPageState extends State<SettingScreen> {
           key: ConfigKey.bitlyKey.toString(),
           value: appConfig.values[ConfigKey.bitlyKey.toString()]);
     }
+    if (appConfig.values[ConfigKey.userSettingBody.toString()] != null) {
+      await storage.write(
+          key: ConfigKey.userSettingBody.toString(),
+          value: appConfig.values[ConfigKey.userSettingBody.toString()]);
+    }
   }
 
   Widget _showBody(AppConfigModel appConfig) {
@@ -79,6 +84,7 @@ class _SettingsPageState extends State<SettingScreen> {
               _showPasswordInput(appConfig),
               _showTagInput(appConfig),
               _showBitlyInput(appConfig),
+              _showUserSettingBodyInput(appConfig),
               _showSaveButton(appConfig),
             ],
           ),
@@ -223,6 +229,25 @@ class _SettingsPageState extends State<SettingScreen> {
               )),
           validator: (value) =>
               value == null ? 'Password can\'t be empty' : null,
+        ));
+  }
+
+  Widget _showUserSettingBodyInput(AppConfigModel appConfig) {
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+        child: TextFormField(
+          initialValue: appConfig.values[ConfigKey.userSettingBody.toString()],
+          onSaved: (text) {
+            appConfig.update(ConfigKey.userSettingBody.toString(), text!);
+          },
+          maxLines: 10,
+          autofocus: false,
+          decoration: const InputDecoration(
+              hintText: 'User setting Body Text',
+              icon: Icon(
+                Icons.settings,
+                color: Colors.grey,
+              )),
         ));
   }
 

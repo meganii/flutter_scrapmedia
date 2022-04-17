@@ -87,24 +87,35 @@ Future<String?> shortUrl(String apiKey, String longUrl) async {
   return shortenUrl;
 }
 
-Future<void> openScrapbox(ScrapMediaItem item, String projectName) async {
+Future<void> openScrapbox(
+    ScrapMediaItem item, String projectName, String userSettingBody) async {
   String sbUrl = 'https://scrapbox.io/$projectName/';
   await launch(sbUrl +
       Uri.encodeComponent(item.title ?? 'title') +
       '?body=' +
-      Uri.encodeComponent(_createBody(item)));
+      Uri.encodeComponent(_createBody(userSettingBody, item)));
 }
 
-String _createBody(ScrapMediaItem item) {
-  String body = '[${item.cover}]\n\n'
-      '=====\n'
-      '著者: ${item.author} \n'
-      '出版社: ${item.publisher}\n';
-  if (item.asin != null) {
-    body += 'ASIN: ${item.asin}\n';
+String _createBody(String userSettingBody, ScrapMediaItem item) {
+  if (userSettingBody.isEmpty) {
+    String body = '[${item.cover}]\n\n'
+        '=====\n'
+        '著者: ${item.author} \n'
+        '出版社: ${item.publisher}\n';
+    if (item.asin != null) {
+      body += 'ASIN: ${item.asin}\n';
+    }
+    body += '#本';
+    return body;
+  } else {
+    var body = userSettingBody
+        .replaceAll("%cover", item.cover ?? '')
+        .replaceAll("%auther", item.author ?? '')
+        .replaceAll("%publisher", item.publisher ?? '')
+        .replaceAll("%asin", item.asin ?? '')
+        .replaceAll("%isbn", item.isbn ?? '');
+    return body;
   }
-  body += '#本';
-  return body;
 }
 
 String convertToASIN(String isbn) {

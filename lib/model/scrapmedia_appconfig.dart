@@ -4,6 +4,7 @@ class ScrapMediaAppConfig {
   String? amazonTagName;
   String? appSearchMethod;
   String? bitlyKey;
+  String? userSettingBody;
 
   ScrapMediaAppConfig();
 }

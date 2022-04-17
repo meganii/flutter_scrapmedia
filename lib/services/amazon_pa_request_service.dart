@@ -41,7 +41,8 @@ class AmazonPARequestService extends AbstractRequestService {
         author: item.itemInfo?.byLineInfo?.contributors?[0].name,
         publisher: item.itemInfo?.byLineInfo?.manufacturer?.displayValue,
         asin: item.asin,
-        affiliateUrl: affiliateUrl);
+        affiliateUrl: affiliateUrl,
+        isbn: isbn);
   }
 
   Future<String> _getAffiliateUrl(String bitlyKey, String detailPageURL) async {

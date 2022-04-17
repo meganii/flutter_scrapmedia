@@ -71,6 +71,12 @@ void main() async {
     final asin = convertToASIN('9784040824130');
     expect(asin, '404082413X');
   });
+
+  test('selfsetting', () {
+    var auther = "auther";
+    var body = "著者: %auther";
+    expect(body.replaceAll("%auther", auther), "著者: auther");
+  });
 }
 
 class _MyHttpOverrides extends HttpOverrides {}

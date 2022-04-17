@@ -5,6 +5,7 @@ class ScrapMediaItem {
   String? publisher;
   String? asin;
   String? affiliateUrl;
+  String? isbn;
 
   ScrapMediaItem(
       {this.title,
@@ -12,5 +13,6 @@ class ScrapMediaItem {
       this.author,
       this.publisher,
       this.asin,
-      this.affiliateUrl});
+      this.affiliateUrl,
+      this.isbn});
 }
