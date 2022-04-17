@@ -110,7 +110,7 @@ String _createBody(String userSettingBody, ScrapMediaItem item) {
   } else {
     var body = userSettingBody
         .replaceAll("%cover", item.cover ?? '')
-        .replaceAll("%auther", item.author ?? '')
+        .replaceAll("%author", item.author ?? '')
         .replaceAll("%publisher", item.publisher ?? '')
         .replaceAll("%asin", item.asin ?? '')
         .replaceAll("%isbn", item.isbn ?? '');
