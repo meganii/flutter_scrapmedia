@@ -13,7 +13,7 @@ import 'package:flutter_scrapmedia/services/abstract_request_service.dart';
 import 'package:flutter_scrapmedia/services/amazon_pa_request_service.dart';
 import 'package:flutter_scrapmedia/services/openbd_request_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future scanCode(AppConfigModel appConfig, AppStateModel appState) async {
@@ -90,10 +90,13 @@ Future<String?> shortUrl(String apiKey, String longUrl) async {
 Future<void> openScrapbox(
     ScrapMediaItem item, String projectName, String userSettingBody) async {
   String sbUrl = 'https://scrapbox.io/$projectName/';
-  await launch(sbUrl +
+  final uri = Uri.parse(sbUrl +
       Uri.encodeComponent(item.title ?? 'title') +
       '?body=' +
       Uri.encodeComponent(_createBody(userSettingBody, item)));
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  }
 }
 
 String _createBody(String userSettingBody, ScrapMediaItem item) {
