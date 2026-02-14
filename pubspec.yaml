@@ -34,7 +34,7 @@ dependencies:
   cupertino_icons: ^1.0.3
   barcode_scan2 : ^4.3.0
   url_launcher: ^6.0.12
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^9.2.4
   share: ^2.0.4
   flutter_amazon_pa_api:
     git:
@@ -48,9 +48,9 @@ dependencies:
     git:
       url: https://github.com/Davenchy/flutter_launcher_icons.git
       ref: fixMinSdkParseFlutter2.8
-  provider: ^5.0.0
-  flutter_speed_dial: ^4.4.0+1
-  http: ^0.13.6
+  provider: ^6.1.5
+  flutter_speed_dial: ^7.0.0
+  http: ^1.5.0
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +61,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
