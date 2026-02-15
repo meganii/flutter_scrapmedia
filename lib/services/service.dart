@@ -13,7 +13,7 @@ import 'package:flutter_scrapmedia/services/abstract_request_service.dart';
 import 'package:flutter_scrapmedia/services/amazon_pa_request_service.dart';
 import 'package:flutter_scrapmedia/services/openbd_request_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future scanCode(AppConfigModel appConfig, AppStateModel appState) async {
